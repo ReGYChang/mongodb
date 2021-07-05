@@ -20,6 +20,7 @@ def read_process(cmd, args=''):
 
 output_dir = "health_check"
 output_path = "./{}".format(output_dir)
+mongodb_port = 27017
 
 output_mkdir = read_process("mkdir {}".format(output_dir))
 output_osVersion = read_process("cat /etc/redhat-release > {}/os-version.txt".format(output_path))
@@ -38,3 +39,5 @@ output_thp_enabled = read_process("cat /sys/kernel/mm/transparent_hugepage/enabl
 output_noatime = read_process("cat /etc/fstab > {}/noatime.txt".format(output_path))
 output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappiness.txt".format(output_path))
 output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
+output_mongodb_version = read_process("mongod -version > {}/mongodb_version.txt".format(output_path))
+output_mongodb_fcv = read_process("mongo -u admin -p admin --authenticationDatabase admin --eval 'db.adminCommand( { getParameter: 1, featureCompatibilityVersion: 1 } )' > {}/mongodb_version.txt".format(output_path))
