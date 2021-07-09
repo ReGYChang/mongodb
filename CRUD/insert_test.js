@@ -1,8 +1,8 @@
 var insert_test = function (n) {
     var time = (new Date()).getTime();
-    db.backup_test.insert({ "name": "backup", "ns": i, "ts": time });
+    db.ha_test.insert({ "name": "HA", "ns": i, "ts": time });
 }
 
-for (var i = 100001; i <= 150000; i++ ) {
+for (var i = 1; i <= 100000; i++ ) {
     insert_test(i);
 }
