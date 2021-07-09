@@ -13,7 +13,7 @@ import java.util.Date;
 public class Main {
     public static void main(String[] args){
         try{
-            MongoClientURI uri = new MongoClientURI("mongodb://admin:admin@35.229.235.134:27020/?authSource=admin");
+            MongoClientURI uri = new MongoClientURI("mongodb://admin:admin@xxx.xxx.xxx.xxx:27017/?authSource=admin");
             MongoClient client = new MongoClient(uri);
             MongoDatabase test = client.getDatabase("test");
             MongoCollection<Document> ha_test = test.getCollection("ha_test");
