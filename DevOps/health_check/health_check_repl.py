@@ -48,7 +48,6 @@ output_mongodb_config = read_process("cat {} > {}/mongodb_conf.txt".format(confi
 
 # mongo instance info
 output_mongodb_version = read_process("mongod -version > {}/mongodb_version.txt".format(output_path))
-output_mongodb_fcv = read_process("mongo -u {} -p {} --authenticationDatabase admin --eval 'db.adminCommand( { getParameter: 1, featureCompatibilityVersion: 1 } )' > {}/mongodb_fcv.txt".format(username,password,output_path))
 output_mongodb_serverStatus = read_process("mongo -u {} -p {} --authenticationDatabase admin --eval 'db.serverStatus()' > {}/mongodb_serverStatus.txt".format(username,password,output_path))
 output_mongodb_dbstats = read_process("mongo -u {} -p {} --authenticationDatabase admin ./get_dbstats.js > {}/mongodb_dbstats.txt".format(username,password,output_path))
 output_mongodb_rs_conf = read_process("mongo -u {} -p {} --authenticationDatabase admin --eval 'rs.conf()' > {}/mongodb_rs_conf.txt".format(username,password,output_path))
