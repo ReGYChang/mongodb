@@ -18,7 +18,7 @@ def read_process(cmd, args=''):
         pipeout.close()
     return output
 
-
+# script config
 output_dir = "health_check"
 output_path = "./{}".format(output_dir)
 mongodb_port = 27017
@@ -55,3 +55,7 @@ output_mongodb_rs_status = read_process("mongo -u {} -p {} --authenticationDatab
 output_mongodb_rs_oplog = read_process("mongo -u {} -p {} --authenticationDatabase admin --eval 'db.getReplicationInfo()' > {}/mongodb_rs_oplog.txt".format(username,password,output_path))
 output_mongodb_rs_lagtime = read_process("mongo -u {} -p {} --authenticationDatabase admin --eval 'db.printSecondaryReplicationInfo()' > {}/mongodb_rs_lagtime.txt".format(username,password,output_path))
 output_mongodb_rs_frag = read_process("mongo -u {} -p {} --authenticationDatabase admin ./get_colls_frag_ratio.js > {}/mongodb_rs_frag.txt".format(username,password,output_path))
+
+# compress output files
+output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
+output_remove_dir = read_process("rm -rf {}".format(output_dir))
