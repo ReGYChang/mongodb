@@ -18,9 +18,48 @@ def read_process(cmd, args=''):
         pipeout.close()
     return output
 
+# js
+# get all dbs stats
+get_alldbs_dbstats = """
+    var alldbs = db.getMongo().getDBNames();
+    for(var j = 0; j < alldbs.length; j++){
+        var db = db.getSiblingDB(alldbs[j]);
+        printjson(db.stats());
+    }
+"""
+
+# get all collections space fragmentation ratio
+get_colls_frag_ratio = """
+    function getCollectionDiskSpaceFragRatio(dbname, coll) {
+        var res = db.getSiblingDB(dbname).runCommand({
+            collStats: coll
+        });
+        var totalStorageUnusedSize = 0;
+        var totalStorageSize = res['storageSize'] + res['totalIndexSize'];
+        Object.keys(res.indexDetails).forEach(function(key) {
+            var size = res['indexDetails'][key]['block-manager']['file bytes available for reuse'];
+            print("index table " + key + " unused size: " + size);
+            totalStorageUnusedSize += size;
+        });
+        var size = res['wiredTiger']['block-manager']['file bytes available for reuse'];
+        print("collection table " + coll + " unused size: " + size);
+        totalStorageUnusedSize += size;
+        print("collection and index table total unused size: " + totalStorageUnusedSize);
+        print("collection and index table total file size: " + totalStorageSize);
+        print("Fragmentation ratio: " + ((totalStorageUnusedSize * 100.0) / totalStorageSize).toFixed(2) + "%");
+    }
+    var alldbs = db.getMongo().getDBNames();
+    for(var j = 0; j < alldbs.length; j++){
+        var db = db.getSiblingDB(alldbs[j]);
+        print("\n\n================================== DB: " + db.getName() + " ==================================")
+        db.getCollectionNames().forEach((c) => {print("\n\n" + c); getCollectionDiskSpaceFragRatio(db.getName(), c);});
+    }
+"""
+
 output_dir = "health_check"
 output_path = "./{}".format(output_dir)
 mongodb_port = 27017
+config_path = "/etc/mongod.conf"
 
 output_mkdir = read_process("mkdir {}".format(output_dir))
 output_osVersion = read_process("cat /etc/redhat-release > {}/os-version.txt".format(output_path))
@@ -39,5 +78,13 @@ output_thp_enabled = read_process("cat /sys/kernel/mm/transparent_hugepage/enabl
 output_noatime = read_process("cat /etc/fstab > {}/noatime.txt".format(output_path))
 output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappiness.txt".format(output_path))
 output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
+output_mongodb_config = read_process("cat {} > {}/mongodb_conf.txt".format(config_path,output_path))
 output_mongodb_version = read_process("mongod -version > {}/mongodb_version.txt".format(output_path))
 output_mongodb_fcv = read_process("mongo -u admin -p admin --authenticationDatabase admin --eval 'db.adminCommand( { getParameter: 1, featureCompatibilityVersion: 1 } )' > {}/mongodb_version.txt".format(output_path))
+output_mongodb_serverStatus = read_process("mongo -u admin -p admin --authenticationDatabase admin --eval 'db.serverStatus()' > {}/mongodb_serverStatus.txt".format(output_path))
+output_mongodb_dbstats = read_process("mongo -u admin -p admin --authenticationDatabase admin --eval '{}' > {}/mongodb_dbstats.txt".format(get_alldbs_dbstats,output_path))
+output_mongodb_rs_conf = read_process("mongo -u admin -p admin --authenticationDatabase admin --eval 'rs.conf()' > {}/mongodb_rs_conf.txt".format(output_path))
+output_mongodb_rs_status = read_process("mongo -u admin -p admin --authenticationDatabase admin --eval 'rs.status()' > {}/mongodb_rs_status.txt".format(output_path))
+output_mongodb_rs_oplog = read_process("mongo -u admin -p admin --authenticationDatabase admin --eval 'db.getReplicationInfo()' > {}/mongodb_rs_oplog.txt".format(output_path))
+output_mongodb_rs_lagtime = read_process("mongo -u admin -p admin --authenticationDatabase admin --eval 'db.printSecondaryReplicationInfo()' > {}/mongodb_rs_lagtime.txt".format(output_path))
+output_mongodb_rs_frag = read_process("mongo -u admin -p admin --authenticationDatabase admin --eval '{}' > {}/mongodb_rs_frag.txt".format(get_colls_frag_ratio,output_path))
