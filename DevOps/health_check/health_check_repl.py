@@ -45,6 +45,7 @@ output_thp_defrag = read_process("cat /sys/kernel/mm/transparent_hugepage/defrag
 output_thp_enabled = read_process("cat /sys/kernel/mm/transparent_hugepage/enabled > {}/thp_enabled.txt".format(output_path))
 output_noatime = read_process("cat /etc/fstab > {}/noatime.txt".format(output_path))
 output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappiness.txt".format(output_path))
+output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode > {}/zone_reclaim_mode.txt".format(output_path))
 output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
 output_mongodb_config = read_process("cat {} > {}/mongodb_conf.txt".format(config_path,output_path))
 
