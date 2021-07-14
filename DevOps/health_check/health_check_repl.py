@@ -1,5 +1,6 @@
 import os
 import re
+from datetime import date
 
 def read_process(cmd, args=''):
     fullcmd = '%s %s' % (cmd, args)
@@ -19,7 +20,8 @@ def read_process(cmd, args=''):
     return output
 
 # script config
-output_dir = "health_check"
+today = date.today()
+output_dir = "health_check_{}".format(today)
 output_path = "./{}".format(output_dir)
 mongodb_port = 27017
 config_path = "/etc/mongod.conf"
