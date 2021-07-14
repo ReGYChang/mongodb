@@ -1,4 +1,5 @@
 // get all collections space fragmentation ratio //
+rs.secondaryOk();
 
 function getCollectionDiskSpaceFragRatio(dbname, coll) {
     var res = db.getSiblingDB(dbname).runCommand({

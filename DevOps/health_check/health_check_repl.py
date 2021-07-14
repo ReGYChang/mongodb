@@ -61,4 +61,3 @@ output_mongodb_rs_frag = read_process("mongo -port {} -u {} -p {} --authenticati
 
 # compress output files
 output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
-output_remove_dir = read_process("rm -rf {}".format(output_dir))
