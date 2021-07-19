@@ -1,6 +1,7 @@
 import os
 import re
 from datetime import date
+from subprocess import check_output
 
 def read_process(cmd, args=''):
     fullcmd = '%s %s' % (cmd, args)
@@ -27,6 +28,7 @@ mongodb_port = 27017
 config_path = "/etc/mongod.conf"
 username = "admin"
 password = "admin"
+mongod_pid = check_output(["pidof","-s","mongod"])
 
 # linux info
 output_mkdir = read_process("mkdir {}".format(output_dir))
@@ -47,9 +49,11 @@ output_noatime = read_process("cat /etc/fstab > {}/noatime.txt".format(output_pa
 output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappiness.txt".format(output_path))
 output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode > {}/zone_reclaim_mode.txt".format(output_path))
 output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
-output_mongodb_config = read_process("cat {} > {}/mongodb_conf.txt".format(config_path,output_path))
+output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
+
 
 # mongo instance info
+output_mongodb_config = read_process("cat {} > {}/mongodb_conf.txt".format(config_path,output_path))
 output_mongodb_version = read_process("mongod -version > {}/mongodb_version.txt".format(output_path))
 output_mongodb_serverStatus = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.serverStatus()' > {}/mongodb_serverStatus.txt".format(mongodb_port,username,password,output_path))
 output_mongodb_dbstats = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./get_dbstats.js > {}/mongodb_dbstats.txt".format(mongodb_port,username,password,output_path))
