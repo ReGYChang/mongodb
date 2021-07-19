@@ -1,4 +1,5 @@
 // get all collections space fragmentation ratio //
+// db.getMongo().setSlaveOk()
 rs.secondaryOk();
 
 function getCollectionDiskSpaceFragRatio(dbname, coll) {

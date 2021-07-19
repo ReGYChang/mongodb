@@ -1,4 +1,5 @@
 // get all dbs stats //
+// db.getMongo().setSlaveOk()
 rs.secondaryOk();
 
 var alldbs = db.getMongo().getDBNames();
