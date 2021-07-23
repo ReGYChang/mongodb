@@ -28,7 +28,7 @@ mongodb_port = 27017
 config_path = "/etc/mongod.conf"
 username = "admin"
 password = "admin"
-mongod_pid = check_output(["pidof","-s","mongod"])
+mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 
 # linux info
 output_mkdir = read_process("mkdir {}".format(output_dir))
