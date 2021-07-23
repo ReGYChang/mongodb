@@ -1,8 +1,22 @@
 import os
 import re
 import yaml
+import sys
 from datetime import date
 from subprocess import check_output
+
+toolbar_width = 30
+
+# setup toolbar
+sys.stdout.write("[%s]" % (" " * toolbar_width))
+sys.stdout.flush()
+sys.stdout.write("\b" * (toolbar_width+1)) # return to start of line, after '['
+
+
+def pb_flush():
+    sys.stdout.write("#")
+    sys.stdout.flush()
+
 
 def read_process(cmd, args=''):
     fullcmd = '%s %s' % (cmd, args)
@@ -18,6 +32,7 @@ def read_process(cmd, args=''):
             raise IOError('%s must be on your system path.' % cmd)
         output = firstline + pipeout.read()
     finally:
+        pb_flush()
         pipeout.close()
     return output
 
@@ -51,7 +66,7 @@ output_disk_info_block = read_process("lsblk > {}/disk-info.txt".format(output_p
 output_disk_info_fs = read_process("df -h >> {}/disk-info.txt".format(output_path))
 output_network_info = read_process("ip addr > {}/network-info.txt".format(output_path))
 output_uptime = read_process("uptime > {}/uptime.txt".format(output_path))
-output_numa = read_process("numactl --hardware > {}/numa.txt".format(output_path))
+#output_numa = read_process("numactl --hardware > {}/numa.txt".format(output_path))
 output_numa = read_process("cat /proc/cmdline >> {}/numa.txt".format(output_path))
 output_numa = read_process("dmesg | grep -i numa >> {}/numa.txt".format(output_path))
 output_thp_defrag = read_process("cat /sys/kernel/mm/transparent_hugepage/defrag > {}/thp_defrag.txt".format(output_path))
@@ -81,3 +96,5 @@ read_process("cp {} {}/mongod.log.{}".format(log_path,output_path,today))
 
 # compress output files
 output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
+
+sys.stdout.write("]\n") # this ends the progress bar
