@@ -1,5 +1,6 @@
 import os
 import re
+import yaml
 from datetime import date
 from subprocess import check_output
 
@@ -30,6 +31,16 @@ username = "admin"
 password = "admin"
 mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 
+# read mongod.conf
+with open("{}".format(config_path),"r") as stream:
+    try:
+        mongod_conf = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
+
+log_path = mongod_conf['systemLog']['path'].strip()
+
+
 # linux info
 output_mkdir = read_process("mkdir {}".format(output_dir))
 output_osVersion = read_process("cat /etc/redhat-release > {}/os-version.txt".format(output_path))
@@ -52,6 +63,8 @@ output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
 output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
 
 
+
+
 # mongo instance info
 output_mongodb_config = read_process("cat {} > {}/mongodb_conf.txt".format(config_path,output_path))
 output_mongodb_version = read_process("mongod -version > {}/mongodb_version.txt".format(output_path))
@@ -62,6 +75,9 @@ output_mongodb_rs_status = read_process("mongo -port {} -u {} -p {} --authentica
 output_mongodb_rs_oplog = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.getReplicationInfo()' > {}/mongodb_rs_oplog.txt".format(mongodb_port,username,password,output_path))
 output_mongodb_rs_lagtime = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSecondaryReplicationInfo()' > {}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path))
 output_mongodb_rs_frag = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./get_colls_frag_ratio.js > {}/mongodb_rs_frag.txt".format(mongodb_port,username,password,output_path))
+
+# cp mongod.log
+read_process("cp {} {}/mongod.log.{}".format(log_path,output_path,today))
 
 # compress output files
 output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
