@@ -77,9 +77,6 @@ output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode >
 output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
 output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
 
-
-
-
 # mongo instance info
 output_mongodb_config = read_process("cat {} > {}/mongodb_conf.txt".format(config_path,output_path))
 output_mongodb_version = read_process("mongod -version > {}/mongodb_version.txt".format(output_path))

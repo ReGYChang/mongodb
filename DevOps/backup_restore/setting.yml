@@ -1,0 +1,4 @@
+username: admin
+pwd: admin
+port: 27017
+output_path: /opt/OmniMongoDB/backup/
