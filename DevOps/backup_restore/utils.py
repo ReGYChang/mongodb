@@ -19,9 +19,15 @@ def read_process(cmd, args=''):
         pipeout.close()
     return output
 
-def getSecondaryNode(port,username,password):
-    hosts = read_process("mongo --quiet -u {} -p {} --authenticationDatabase=admin --eval 'db.hello().hosts'")
-    primary = read_process("mongo --quiet -u {} -p {} --authenticationDatabase=admin --eval 'db.hello().primary'")
+def getSecondaryNode(port):
+    hosts = read_process("mongo \
+        --quiet \
+        -- port {} \
+        --eval 'db.hello().hosts'".format(port))
+
+    primary = read_process("mongo --quiet \
+        -- port {} \
+        --eval 'db.hello().primary'".format(port))
 
     for host in re.findall(r"\"(.+?)\"",hosts):
         if primary == host:
