@@ -1,25 +1,26 @@
-import utils
+from utils import *
 
 mongodump = """
 mongodump \ 
-    -u {{ mongodb_admin_user }} \
-    -p {{ mongodb_admin_pwd }} \
+    -u admin \
+    -p admin \
     --authenticationDatabase=admin \
-    --port {{ mongodb_port }} \
-    -o /opt/OmniMongoDB/backup/{{ ansible_date_time.date }}_mongodb_backup
-"""
+    --port 27017 \
+    -o /opt/OmniMongoDB/backup/{}_mongodb_backup
+""".format(getCurrentDate())
 
 mongosh = """
 mongo \
+    --host {}
     -u admin\
     -p admin\
     --authenticationDatabase=admin \
     --port 27017 \
     --eval
-"""
+""".format(getSecondaryNode())
 
-utils.read_process("{} {}".format(mongosh,"`db.fsyncLock();`"))
+read_process("{} {}".format(mongosh,"'db.fsyncLock();'"))
 
-utils.read_process("{}".format(mongodump))
+read_process("{}".format(mongodump))
 
-utils.read_process("{} {}".format(mongosh,"`db.fsyncUnlock();`"))
+read_process("{} {}".format(mongosh,"'db.fsyncUnlock();'"))

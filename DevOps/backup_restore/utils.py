@@ -1,5 +1,6 @@
 import os
 import re
+import datetime
 
 def read_process(cmd, args=''):
     fullcmd = '%s %s' % (cmd, args)
@@ -17,3 +18,15 @@ def read_process(cmd, args=''):
     finally:
         pipeout.close()
     return output
+
+def getSecondaryNode(port,username,password):
+    hosts = read_process("mongo --quiet -u {} -p {} --authenticationDatabase=admin --eval 'db.hello().hosts'")
+    primary = read_process("mongo --quiet -u {} -p {} --authenticationDatabase=admin --eval 'db.hello().primary'")
+
+    for host in re.findall(r"\"(.+?)\"",hosts):
+        if primary == host:
+            continue
+        return host.split(':')[0]
+
+def getCurrentDate():
+    return datetime.date.today()
