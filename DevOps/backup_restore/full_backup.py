@@ -10,18 +10,20 @@ port = settings_json["port"]
 output_path = settings_json["output_path"]
 
 mongodump = "mongodump \
+    --host {} \
     -u {} \
     -p {} \
     --authenticationDatabase=admin \
     --port {} \
-    -o /opt/OmniMongoDB/backup/{}_mongodb_backup".format(username,password,port,getCurrentDate())
+    --gzip \
+    -o /opt/OmniMongoDB/backup/{}_mongodb_backup".format(getSecondaryNode(port),username,password,port,getCurrentDate())
 
 mongosh = "mongo \
     --host {} \
     -u {} \
     -p {} \
     --authenticationDatabase=admin  \
-    --port {}} \
+    --port {} \
     --eval ".format(getSecondaryNode(port),username,password,port)
 
 read_process("{} {}".format(mongosh,"'db.fsyncLock();'"))

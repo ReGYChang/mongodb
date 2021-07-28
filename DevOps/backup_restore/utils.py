@@ -19,6 +19,12 @@ def read_process(cmd, args=''):
         pipeout.close()
     return output
 
+def getPrimaryNode(port):
+    primary = read_process("mongo --quiet \
+        -- port {} \
+        --eval 'db.hello().primary'".format(port))
+    return primary.split(':')[0]
+
 def getSecondaryNode(port):
     hosts = read_process("mongo \
         --quiet \
@@ -36,3 +42,6 @@ def getSecondaryNode(port):
 
 def getCurrentDate():
     return datetime.date.today()
+
+def getCurrentHour():
+    return getCurrentDate().strftime("%Y/%m/%d%H")
