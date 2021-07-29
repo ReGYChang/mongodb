@@ -45,7 +45,7 @@ def getCurrentDate():
     return datetime.date.today()
 
 def getCurrentHour():
-    return read_process("date -d '-1 days' '+%Y%m%d%H'")
+    return read_process("date '+%Y%m%d%H'").strip()
 
 def mongodump(host,username,password,port,output,isGzip,*isOplog):
     dump_args = "mongodump \
@@ -60,5 +60,5 @@ def mongodump(host,username,password,port,output,isGzip,*isOplog):
     if isOplog[0]:
         dump_args += " -d local \
             -c oplog.rs \
-            --query '{ts:{$gte:Timestamp({},1),$lte:Timestamp({},9999)}}'".format(isOplog[1],isOplog[2])
+            --query '{{'ts':{{'$gte':'Timestamp({},1)','$lte':'Timestamp({},9999)'}}}}'".format(isOplog[1],isOplog[2])
     read_process(dump_args)
