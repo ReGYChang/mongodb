@@ -42,7 +42,7 @@ def getSecondaryNode(port):
         return host.split(':')[0]
 
 def getCurrentDate():
-    return datetime.date.today()
+    return read_process("date '+%Y%m%d'").strip()
 
 def getCurrentHour():
     return read_process("date '+%Y%m%d%H'").strip()
