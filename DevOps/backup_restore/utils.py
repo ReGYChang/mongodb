@@ -63,3 +63,12 @@ def mongodump(host,username,password,port,output,isGzip,*isOplog):
             -c oplog.rs \
             --query '{}'".format(time_scope)
     read_process(dump_args)
+
+def mongosh(host,username,password,port,cmd):
+    sh_args = "mongo \
+        --host {} \
+        -u {} \
+        -p {} \
+        --port {} \
+        --authenticationDatabase=admin \
+        --eval '{}'".format(host,username,password,port,cmd)
