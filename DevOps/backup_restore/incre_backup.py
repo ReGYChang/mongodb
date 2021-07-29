@@ -30,13 +30,13 @@ mongodump(primary,username,password,port,output_file,True,True,backup_start_time
 
 # ensure backup process within 5 mins (default)
 if (int(read_process("date +%s")) - diff_time_check > backup_start_time):
-    print("Fatal Error: oplog export time exceeded legal diff_time scope.Could not guarantee the data consistency.Should increase diff_time arg and adjust backup frequency.")
+    print("Fatal Error: Oplog export time exceeded legal diff_time scope.Could not guarantee the data consistency.Should increase diff_time arg and adjust backup frequency.")
 else:
     print("Message: Backup oplog process check completed successfully.")
 
 # check oplog file after backup process
 if(os.path.isdir("{}/oplog/{}_mongodb_oplog".format(output_path,getCurrentHour())) == False):
-    print("Fatal Error: oplog file does not exist, please checkout.")
+    print("Fatal Error: Oplog file does not exist, please checkout.")
 else:
     print("Message: Oplog file check completed successfully.")
 
