@@ -56,9 +56,9 @@ def mongodump(host,username,password,port,output,isGzip,*isOplog):
         -o {} \
         --authenticationDatabase=admin".format(host,username,password,port,output)
     if isGzip:
-        dump_args += " \\n--gzip"
+        dump_args += " --gzip"
     if isOplog[0]:
-        dump_args += " \n-d local \
+        dump_args += " -d local \
             -c oplog.rs \
             --query '{ts:{$gte:Timestamp({},1),$lte:Timestamp({},9999)}}'".format(isOplog[1],isOplog[2])
     read_process(dump_args)

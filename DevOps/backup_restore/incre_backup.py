@@ -16,24 +16,27 @@ backup_end_time = read_process("date +%s")
 backup_start_time = backup_end_time - diff_time
 keep_backup_time = read_process("date -d '-1 days' '+%Y%m%d%H'")
 
-mongodump = "mongodump \
-    --host {} \
-    -u {} \
-    -p {} \
-    --port {} \
-    --authenticationDatabase=admin \
-    --gzip \
-    -d local \
-    -c oplog.rs  \
-    --query '{ts:{$gte:Timestamp({},1),$lte:Timestamp({},9999)}}' \
-    -o {}/oplog/{}_mongodb_oplog".format(getPrimaryNode(port),username,password,port,backup_start_time,backup_end_time,output_path,getCurrentHour())
+primary = getPrimaryNode(port)
+output_file = "{}/oplog/{}_mongodb_oplog".format(output_path,getCurrentHour())
+
+# mongodump2 = "mongodump \
+#     --host {} \
+#     -u {} \
+#     -p {} \
+#     --port {} \
+#     --authenticationDatabase=admin \
+#     --gzip \
+#     -d local \
+#     -c oplog.rs  \
+#     --query '{ts:{$gte:Timestamp({},1),$lte:Timestamp({},9999)}}' \
+#     -o {}/oplog/{}_mongodb_oplog".format(getPrimaryNode(port),username,password,port,backup_start_time,backup_end_time,output_path,getCurrentHour())
 
 # ensure oplog dir exist
 if (os.path.isdir(output_path + "/oplog") == False):
     read_process("mkdir -p {}/oplog".format(output_path))
 
-# backup mongodb oplog
-read_process("{}".format(mongodump))
+# backup mongodb
+mongodump(primary,username,password,port,output_file,True,True,backup_start_time,backup_end_time)
 
 # ensure backup process within 5 mins (default)
 if (read_process("date +%s") - diff_time_check > backup_start_time):
