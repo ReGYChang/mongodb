@@ -58,7 +58,8 @@ def mongodump(host,username,password,port,output,isGzip,*isOplog):
     if isGzip:
         dump_args += " --gzip"
     if isOplog[0]:
+        time_scope = '{{"ts":{{"$gte":"Timestamp({},1)","$lte":"Timestamp({},9999)"}}}}'.format(isOplog[1],isOplog[2])
         dump_args += " -d local \
             -c oplog.rs \
-            --query '{{'ts':{{'$gte':'Timestamp({},1)','$lte':'Timestamp({},9999)'}}}}'".format(isOplog[1],isOplog[2])
+            --query '{}'".format(time_scope)
     read_process(dump_args)
