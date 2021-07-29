@@ -54,7 +54,7 @@ def mongodump(host,username,password,port,output,isGzip,*isOplog):
         -p {} \
         --port {} \
         -o {} \
-        --authenticationDatabase=admin"
+        --authenticationDatabase=admin".format(host,username,password,port,output)
     if isGzip:
         dump_args += " \\n--gzip"
     if isOplog[0]:
