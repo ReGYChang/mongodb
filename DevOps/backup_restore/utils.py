@@ -72,3 +72,4 @@ def mongosh(host,username,password,port,cmd):
         --port {} \
         --authenticationDatabase=admin \
         --eval '{}'".format(host,username,password,port,cmd)
+    read_process(sh_args)
