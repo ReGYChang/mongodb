@@ -1,6 +1,7 @@
 from utils import *
 import json
 
+# import configuration
 settings = open('settings.json')
 settings_json = json.load(settings)
 
@@ -9,25 +10,23 @@ password = settings_json["password"]
 port = settings_json["port"]
 output_path = settings_json["output_path"]
 
-mongodump = "mongodump \
-    --host {} \
-    -u {} \
-    -p {} \
-    --authenticationDatabase=admin \
-    --port {} \
-    --gzip \
-    -o /opt/OmniMongoDB/backup/{}_mongodb_backup".format(getSecondaryNode(port),username,password,port,getCurrentDate())
+secondary = getSecondaryNode(port)
+output_file = "{}/{}_mongodb_backup".format(output_path,getCurrentDate())
+
 
 mongosh = "mongo \
     --host {} \
     -u {} \
     -p {} \
-    --authenticationDatabase=admin  \
     --port {} \
+    --authenticationDatabase=admin  \
     --eval ".format(getSecondaryNode(port),username,password,port)
 
+# fsyncLock secondary node
 read_process("{} {}".format(mongosh,"'db.fsyncLock();'"))
 
-read_process("{}".format(mongodump))
+# full backup mongodb data
+mongodump(secondary,username,password,port,output_file)
 
+# fsyncUnlock secondary node
 read_process("{} {}".format(mongosh,"'db.fsyncUnlock();'"))

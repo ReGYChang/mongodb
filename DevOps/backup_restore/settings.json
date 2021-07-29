@@ -3,6 +3,6 @@
 "username": "admin",
 "password": "admin",
 "port": 27017,
-"output_path": "/opt/OmniMongoDB/backup/"
+"output_path": "/opt/OmniMongoDB/backup"
 
 }
