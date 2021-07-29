@@ -26,7 +26,7 @@ mongosh = "mongo \
 read_process("{} {}".format(mongosh,"'db.fsyncLock();'"))
 
 # full backup mongodb data
-mongodump(secondary,username,password,port,output_file)
+mongodump(secondary,username,password,port,output_file,True,False)
 
 # fsyncUnlock secondary node
 read_process("{} {}".format(mongosh,"'db.fsyncUnlock();'"))
