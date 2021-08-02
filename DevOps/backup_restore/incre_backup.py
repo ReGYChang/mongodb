@@ -25,7 +25,7 @@ output_file = "{}/oplog/{}_mongodb_oplog".format(output_path,getCurrentHour())
 if (os.path.isdir(output_path + "/oplog") == False):
     read_process("mkdir -p {}/oplog".format(output_path))
 
-# backup mongodb
+# backup mongodb oplog
 mongodump(primary,username,password,port,output_file,True,True,backup_start_time,backup_end_time)
 
 # ensure backup process within 5 mins (default)

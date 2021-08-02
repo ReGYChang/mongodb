@@ -73,3 +73,11 @@ def mongosh(host,username,password,port,cmd):
         --authenticationDatabase=admin \
         --eval '{}'".format(host,username,password,port,cmd)
     read_process(sh_args)
+
+def copy(source, destination):
+    cp_args = "cp {} {}".format(source, destination)
+    read_process(cp_args)
+
+def gunzip(target):
+    gunzip_args = "gunzip {}".format(target)
+    read_process(gunzip_args)
