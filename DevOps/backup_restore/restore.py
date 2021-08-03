@@ -11,5 +11,5 @@ password = settings_json["password"]
 port = settings_json["port"]
 output_path = settings_json["output_path"]
 
-restore_limit = 1
-restore_start_time = int(read_process("date +%s"))
+restore_timelimit = 1
+restore_target_time = int(read_process("date +%s")) - restore_timelimit * 60
