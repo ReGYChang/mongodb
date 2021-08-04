@@ -9,6 +9,8 @@ username = settings_json["username"]
 password = settings_json["password"]
 port = settings_json["port"]
 backup_path = settings_json["backup_path"]
+isGzip = settings_json["is_gzip"]
+
 output_file = "{}/{}_mongodb_backup".format(backup_path,getCurrentDate())
 secondary = getSecondaryNode(port)
 keep_backup_time = read_process("date -d '-7 days' '+%Y%m%d'").strip()
@@ -17,7 +19,7 @@ keep_backup_time = read_process("date -d '-7 days' '+%Y%m%d'").strip()
 mongosh(secondary,username,password,port,"db.fsyncLock();")
 
 # full backup mongodb data
-mongodump(secondary,username,password,port,output_file,True,False)
+mongodump(secondary,username,password,port,output_file,isGzip,False)
 
 # fsyncUnlock secondary node
 mongosh(secondary,username,password,port,"db.fsyncUnlock();")

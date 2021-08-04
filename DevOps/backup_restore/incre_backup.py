@@ -10,6 +10,7 @@ username = settings_json["username"]
 password = settings_json["password"]
 port = settings_json["port"]
 backup_path = settings_json["backup_path"]
+isGzip = settings_json["is_gzip"]
 
 # incremental backup configuration
 diff_time = 65 * 60
@@ -26,7 +27,7 @@ if (os.path.isdir(backup_path + "/oplog") == False):
     read_process("mkdir -p {}/oplog".format(backup_path))
 
 # backup mongodb oplog
-mongodump(primary,username,password,port,output_file,True,True,backup_start_time,backup_end_time)
+mongodump(primary,username,password,port,output_file,isGzip,True,backup_start_time,backup_end_time)
 
 # ensure backup process within 5 mins (default)
 if (int(read_process("date +%s")) - diff_time_check > backup_start_time):

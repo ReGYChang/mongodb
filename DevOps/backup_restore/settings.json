@@ -3,6 +3,7 @@
 "username": "admin",
 "password": "admin",
 "port": 27017,
-"backup_path": "/opt/OmniMongoDB/backup"
+"backup_path": "/opt/OmniMongoDB/backup",
+"is_gzip": true
 
 }

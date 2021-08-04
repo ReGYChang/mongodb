@@ -75,7 +75,22 @@ def mongosh(host,username,password,port,cmd):
     read_process(sh_args)
 
 def mongorestore(host,username,password,port,input,isGzip,*isOplog):
-    return None
+    restore_args = "mongorestore \
+        --host {} \
+        -u {} \
+        -p {} \
+        --port {} \
+        --authenticationDatabase=admin".format(host,username,password,port)
+    if isGzip:
+        restore_args += " --gzip"
+    if isOplog[0]:
+        restore_args += " --oplogReplay \
+            --oplogFile {} \
+            --dir /tmp/emptyDirForOpRestore".format(input)
+    else:
+        restore_args += ' ' + input
+
+    read_process(restore_args)
     
 def copy(source, destination):
     cp_args = "cp {} {}".format(source, destination)
