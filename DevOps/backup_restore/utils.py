@@ -74,7 +74,7 @@ def mongosh(host,username,password,port,cmd):
         --eval '{}'".format(host,username,password,port,cmd)
     read_process(sh_args)
 
-def mongorestore(host,username,password,port):
+def mongorestore(host,username,password,port,input,isGzip,*isOplog):
     return None
     
 def copy(source, destination):
