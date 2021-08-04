@@ -80,13 +80,15 @@ def mongorestore(host,username,password,port,input,isGzip,*isOplog):
         -u {} \
         -p {} \
         --port {} \
-        --authenticationDatabase=admin".format(host,username,password,port)
+        --authenticationDatabase=admin \
+        --drop ".format(host,username,password,port)
     if isGzip:
         restore_args += " --gzip"
     if isOplog[0]:
         restore_args += " --oplogReplay \
             --oplogFile {} \
-            --dir /tmp/emptyDirForOpRestore".format(input)
+            --dir /tmp/emptyDirForOpRestore \
+            --oplogLimit {}:1".format(input,isOplog[1])
     else:
         restore_args += ' ' + input
 
