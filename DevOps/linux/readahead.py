@@ -13,9 +13,9 @@ def setup_readahead():
             tunedconf = tunedconf_file.read()
         print("Message: tuned.conf file check completed successfully.")
 
-    with open('/etc/sysctl.conf', 'w') as tunedconf_file:
-        sysconf = re.sub(r"readahead=>.+","readahead=>16",tunedconf)
-        tunedconf_file.write(sysconf)
+    with open('/lib/tuned/throughput-performance/tuned.conf', 'w') as tunedconf_file:
+        tunedconf = re.sub(r"readahead=>.+","readahead=>16",tunedconf)
+        tunedconf_file.write(tunedconf)
 
     read_process("service tuned restart")
 
