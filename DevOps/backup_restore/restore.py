@@ -3,7 +3,7 @@ import os
 import json
 
 # import configuration
-settings = open('settings.json')
+settings = open('/opt/OmniMongoDB/backup/settings.json')
 settings_json = json.load(settings)
 
 username = settings_json["username"]
