@@ -1,6 +1,5 @@
 import os
 import re
-import datetime
 
 def read_process(cmd, args=''):
     fullcmd = '%s %s' % (cmd, args)
@@ -87,8 +86,9 @@ def mongorestore(host,username,password,port,input,isGzip,*isOplog):
     if isOplog[0]:
         restore_args += " --oplogReplay \
             --oplogFile {} \
-            --dir /tmp/emptyDirForOpRestore \
-            --oplogLimit {}:1".format(input,isOplog[1])
+            --dir /tmp/emptyDirForOpRestore".format(input)
+    if isOplog[1] > 0:
+        restore_args += " --oplogLimit {}:1".format(isOplog[1])
     else:
         restore_args += ' ' + input
 
