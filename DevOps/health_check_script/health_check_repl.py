@@ -87,6 +87,8 @@ output_mongodb_rs_status = read_process("mongo -port {} -u {} -p {} --authentica
 output_mongodb_rs_oplog = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.getReplicationInfo()' > {}/mongodb_rs_oplog.txt".format(mongodb_port,username,password,output_path))
 output_mongodb_rs_lagtime = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSecondaryReplicationInfo()' > {}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path))
 output_mongodb_rs_frag = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./get_colls_frag_ratio.js > {}/mongodb_rs_frag.txt".format(mongodb_port,username,password,output_path))
+output_mongodb_colls_stats = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./get_colls_stats.js > {}/mongodb_colls_stats.txt".format(mongodb_port,username,password,output_path))
+output_mongodb_index = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./get_colls_frag_ratio.js > {}/mongodb_rs_frag.txt".format(mongodb_port,username,password,output_path))
 
 # cp mongod.log
 read_process("cp {} {}/mongod.log.{}".format(log_path,output_path,today))
