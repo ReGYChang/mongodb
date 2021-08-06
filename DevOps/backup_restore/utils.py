@@ -107,4 +107,4 @@ def gunzip(target):
     read_process(gunzip_args)
 
 def printlog(log):
-    return print(getCurrentTimestamp + log)
+    print(getCurrentTimestamp + log)
