@@ -42,7 +42,7 @@ def getSecondaryNode(port):
         return host.split(':')[0]
 
 def getCurrentTimestamp():
-    return "[" + datetime.datetime.now + "]"
+    return str(datetime.datetime.now())
 
 def getCurrentDate():
     return read_process("date '+%Y%m%d'").strip()
