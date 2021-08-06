@@ -36,10 +36,10 @@ else:
     printlog("Message: Backup oplog process check completed successfully.")
 
 # check oplog file after backup process
-if(os.path.isdir("{}/oplog/{}_mongodb_oplog".format(backup_path,getCurrentHour())) == False):
-    printlog("Fatal Error: Oplog file does not exist, please checkout.")
+if(os.path.isdir(output_file) == False):
+    printlog("Fatal Error: Oplog file {} does not exist, please checkout.".format(getCurrentHour()))
 else:
-    printlog("Message: Oplog file check completed successfully.")
+    printlog("Message: Oplog file {} check completed successfully.".format(getCurrentHour()))
 
 # remove oplog file 1 day ago
 if(os.path.isdir("{}/oplog/{}_mongodb_oplog".format(backup_path,keep_backup_time))):
