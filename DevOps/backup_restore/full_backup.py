@@ -26,13 +26,13 @@ mongosh(secondary,username,password,port,"db.fsyncUnlock();")
 
 # check full backup file after backup process
 if(os.path.isdir(output_file) == False):
-    print("Fatal Error: Full backup file does not exist, please checkout.")
+    printlog("Fatal Error: Full backup file does not exist, please checkout.")
 else:
-    print("Message: Full backup file check completed successfully.")
+    printlog("Message: Full backup file check completed successfully.")
 
 # remove full backup file 1 day ago
 if(os.path.isdir("{}/{}_mongodb_backup".format(backup_path,keep_backup_time))):
     os.remove("{}/{}_mongodb_backup".format(backup_path,keep_backup_time))
-    print("Message: Remove full backup file one day ago.")
+    printlog("Message: Remove full backup file one day ago.")
 else:
-    print("Message: There is no full backup file to remove.")
+    printlog("Message: There is no full backup file to remove.")

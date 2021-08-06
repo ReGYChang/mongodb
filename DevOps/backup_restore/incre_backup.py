@@ -31,19 +31,19 @@ mongodump(primary,username,password,port,output_file,isGzip,True,backup_start_ti
 
 # ensure backup process within 5 mins (default)
 if (int(read_process("date +%s")) - diff_time_check > backup_start_time):
-    print("Fatal Error: Oplog export time exceeded legal diff_time scope.Could not guarantee the data consistency.Should increase diff_time arg and adjust backup frequency.")
+    printlog("Fatal Error: Oplog export time exceeded legal diff_time scope.Could not guarantee the data consistency.Should increase diff_time arg and adjust backup frequency.")
 else:
-    print("Message: Backup oplog process check completed successfully.")
+    printlog("Message: Backup oplog process check completed successfully.")
 
 # check oplog file after backup process
 if(os.path.isdir("{}/oplog/{}_mongodb_oplog".format(backup_path,getCurrentHour())) == False):
-    print("Fatal Error: Oplog file does not exist, please checkout.")
+    printlog("Fatal Error: Oplog file does not exist, please checkout.")
 else:
-    print("Message: Oplog file check completed successfully.")
+    printlog("Message: Oplog file check completed successfully.")
 
 # remove oplog file 1 day ago
 if(os.path.isdir("{}/oplog/{}_mongodb_oplog".format(backup_path,keep_backup_time))):
     os.remove("{}/oplog/{}_mongodb_oplog".format(backup_path,keep_backup_time))
-    print("Message: Remove oplog file one day ago.")
+    printlog("Message: Remove oplog file one day ago.")
 else:
-    print("Message: There is no oplog file to remove.")
+    printlog("Message: There is no oplog file to remove.")

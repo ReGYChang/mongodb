@@ -1,5 +1,6 @@
 import os
 import re
+import datetime
 
 def read_process(cmd, args=''):
     fullcmd = '%s %s' % (cmd, args)
@@ -39,6 +40,9 @@ def getSecondaryNode(port):
         if primary == host:
             continue
         return host.split(':')[0]
+
+def getCurrentTimestamp():
+    return "[" + datetime.datetime.now + "]"
 
 def getCurrentDate():
     return read_process("date '+%Y%m%d'").strip()
@@ -101,3 +105,6 @@ def copy(source, destination):
 def gunzip(target):
     gunzip_args = "gunzip {}".format(target)
     read_process(gunzip_args)
+
+def printlog(log):
+    return print(getCurrentTimestamp + log)

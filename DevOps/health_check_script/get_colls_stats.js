@@ -10,7 +10,7 @@ for(var j = 0; j < alldbs.length; j++){
     print("\n\n================================== DB: " + db.getName() + " ==================================")
 
     db.getCollectionNames().forEach((c) => {
-        print("\n\nCollection: " + c)
+        print("\n\n====================Collection: " + c)
         printjson(db.runCommand({
             collStats: c
     }));})
