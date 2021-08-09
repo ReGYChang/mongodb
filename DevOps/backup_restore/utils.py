@@ -91,8 +91,10 @@ def mongorestore(host,username,password,port,input,isGzip,*isOplog):
         restore_args += " --oplogReplay \
             --oplogFile {} \
             --dir /tmp/emptyDirForOpRestore".format(input)
-    if isOplog[1] > 0:
-        restore_args += " --oplogLimit {}:1".format(isOplog[1])
+
+        if isOplog[1] > 0:
+            restore_args += " --oplogLimit {}:1".format(isOplog[1])
+        
     else:
         restore_args += ' ' + input
 

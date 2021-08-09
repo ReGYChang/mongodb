@@ -28,7 +28,7 @@ if os.path.isdir("/tmp/emptyDirForOpRestore") == False:
     read_process("mkdir -p /tmp/emptyDirForOpRestore")
 
 # ensure full backup file exists
-if os.path.isdir("{}/{}_mongodb_backup".format(backup_path,restore_target_time[:7])) == False:
+if os.path.isdir("{}/{}_mongodb_backup".format(backup_path,restore_target_time[:8])) == False:
     printlog("Fatal Error: Full backup dir does not exist, please checkout.")
     exit()
 else:
@@ -43,13 +43,13 @@ else:
 
 printlog("Message: Start to process full data recovery.")
 
-mongorestore(primary,username,password,port,"{}/{}_mongodb_backup".format(backup_path,restore_target_time[:7]),isGzip,False)
+mongorestore(primary,username,password,port,"{}/{}_mongodb_backup".format(backup_path,restore_target_time[:8]),isGzip,False,oplog_limit)
 
 printlog("Message: Start to process incremental recovery up to date.")
 
 for oplog in oplog_files:
     oplog_time = re.findall(r"\d+",oplog)[0]
-    if oplog_time[:7] == restore_target_time[:7] and int(oplog_time) <= int(current_time):
+    if oplog_time[:8] == restore_target_time[:8] and int(oplog_time) <= int(current_time):
         printlog("Message: Applying oplog {}.".format(oplog_time))
         oplog_file = "{}/oplog/{}/local/oplog.rs.bson".format(backup_path,oplog)
         mongorestore(primary,username,password,port,oplog_file,isGzip,True,oplog_limit)
