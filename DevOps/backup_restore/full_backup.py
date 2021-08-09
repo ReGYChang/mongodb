@@ -1,5 +1,7 @@
 from utils import *
 import json
+import shutil
+
 
 # import configuration
 settings = open('settings.json')
@@ -32,7 +34,7 @@ else:
 
 # remove full backup file 1 day ago
 if(os.path.isdir("{}/{}_mongodb_backup".format(backup_path,keep_backup_time))):
-    os.remove("{}/{}_mongodb_backup".format(backup_path,keep_backup_time))
+    shutil.rmtree("{}/{}_mongodb_backup".format(backup_path,keep_backup_time),ignore_errors=True)
     printlog("[Message]: Remove full backup file one day ago.")
 else:
     printlog("[Message]: There is no full backup file to remove.")
