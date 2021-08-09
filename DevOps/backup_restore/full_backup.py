@@ -32,7 +32,7 @@ if(os.path.isdir(output_file) == False):
 else:
     printlog("[Message]: Full backup file {} check completed successfully.".format(getCurrentDate()))
 
-# remove full backup file 1 day ago
+# remove full backup file 7 day ago
 if(os.path.isdir("{}/{}_mongodb_backup".format(backup_path,keep_backup_time))):
     shutil.rmtree("{}/{}_mongodb_backup".format(backup_path,keep_backup_time),ignore_errors=True)
     printlog("[Message]: Remove full backup file one day ago.")
