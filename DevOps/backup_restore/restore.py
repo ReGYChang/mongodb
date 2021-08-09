@@ -51,5 +51,5 @@ for oplog in oplog_files:
     oplog_time = re.findall(r"\d+",oplog)[0]
     if oplog_time[:8] == restore_target_time[:8] and int(oplog_time) <= int(current_time):
         printlog("Message: Applying oplog {}.".format(oplog_time))
-        oplog_file = "{}/oplog/{}/local/oplog.rs.bson".format(backup_path,oplog)
+        oplog_file = "{}/oplog/{}/local/oplog.rs.bson.gz".format(backup_path,oplog)
         mongorestore(primary,username,password,port,oplog_file,isGzip,True,oplog_limit)
