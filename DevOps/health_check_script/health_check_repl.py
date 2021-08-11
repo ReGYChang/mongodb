@@ -1,6 +1,5 @@
 import os
 import re
-import yaml
 import sys
 from datetime import date
 from subprocess import check_output
@@ -38,22 +37,25 @@ def read_process(cmd, args=''):
 
 # script config
 today = date.today()
-output_dir = "health_check_{}".format(today)
+hostname = read_process("hostname -f")
+output_dir = "{}_health_check_{}".format(hostname,today)
 output_path = "./{}".format(output_dir)
-mongodb_port = 27017
 config_path = "/etc/mongod.conf"
 username = "admin"
 password = "admin"
-mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 
 # read mongod.conf
-with open("{}".format(config_path),"r") as stream:
+with open("{}".format(config_path),"r") as config_data:
     try:
-        mongod_conf = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        print(exc)
+        mongod_conf = config_data.read()
+    except Exception as e:
+        print(e)
 
-log_path = mongod_conf['systemLog']['path'].strip()
+log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
+mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
+mongod_pid = check_output(["pidof","-s","mongod"]).strip()
+
+
 
 
 # linux info
