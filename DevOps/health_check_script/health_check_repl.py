@@ -74,6 +74,7 @@ output_thp_enabled = read_process("cat /sys/kernel/mm/transparent_hugepage/enabl
 output_noatime = read_process("cat /etc/fstab > {}/noatime.txt".format(output_path))
 output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappiness.txt".format(output_path))
 output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode > {}/zone_reclaim_mode.txt".format(output_path))
+output_readahead = read_process("blockdev --report > {}/readahead.txt".format(output_path))
 output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
 output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
 
