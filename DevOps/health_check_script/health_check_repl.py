@@ -66,7 +66,6 @@ output_disk_info_block = read_process("lsblk > {}/disk-info.txt".format(output_p
 output_disk_info_fs = read_process("df -h >> {}/disk-info.txt".format(output_path))
 output_network_info = read_process("ip addr > {}/network-info.txt".format(output_path))
 output_uptime = read_process("uptime > {}/uptime.txt".format(output_path))
-#output_numa = read_process("numactl --hardware > {}/numa.txt".format(output_path))
 output_numa = read_process("cat /proc/cmdline >> {}/numa.txt".format(output_path))
 output_numa = read_process("dmesg | grep -i numa >> {}/numa.txt".format(output_path))
 output_thp_defrag = read_process("cat /sys/kernel/mm/transparent_hugepage/defrag > {}/thp_defrag.txt".format(output_path))
