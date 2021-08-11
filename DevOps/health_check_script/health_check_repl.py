@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import json
 from datetime import date
 from subprocess import check_output
 
@@ -35,14 +36,18 @@ def read_process(cmd, args=''):
         pipeout.close()
     return output
 
+# import configuration
+config_data = open('config.json')
+config_json = json.load(config_data)
+
 # script config
 today = date.today()
 hostname = read_process("hostname -f")
 output_dir = "{}_health_check_{}".format(hostname,today)
 output_path = "./{}".format(output_dir)
-config_path = "/etc/mongod.conf"
-username = "admin"
-password = "admin"
+config_path = config_json["mongod_conf"]
+username = config_json["username"]
+password = config_json["password"]
 
 # read mongod.conf
 with open("{}".format(config_path),"r") as config_data:
@@ -54,9 +59,9 @@ with open("{}".format(config_path),"r") as config_data:
 log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
 mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
 mongod_pid = check_output(["pidof","-s","mongod"]).strip()
+mongod_version = re.findall(r"(v[\d.]+)",read_process("mongod --version")).split('.')[1].strip()
 
-
-
+read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
 
 # linux info
 output_mkdir = read_process("mkdir {}".format(output_dir))
@@ -80,17 +85,17 @@ output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
 output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
 
 # mongo instance info
-output_mongodb_config = read_process("cat {} > {}/mongodb_conf.txt".format(config_path,output_path))
+output_mongodb_config = read_process("cat {} > {}/mongod_conf.txt".format(config_path,output_path))
 output_mongodb_version = read_process("mongod -version > {}/mongodb_version.txt".format(output_path))
 output_mongodb_serverStatus = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.serverStatus()' > {}/mongodb_serverStatus.txt".format(mongodb_port,username,password,output_path))
-output_mongodb_dbstats = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./get_dbstats.js > {}/mongodb_dbstats.txt".format(mongodb_port,username,password,output_path))
 output_mongodb_rs_conf = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'rs.conf()' > {}/mongodb_rs_conf.txt".format(mongodb_port,username,password,output_path))
 output_mongodb_rs_status = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'rs.status()' > {}/mongodb_rs_status.txt".format(mongodb_port,username,password,output_path))
 output_mongodb_rs_oplog = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.getReplicationInfo()' > {}/mongodb_rs_oplog.txt".format(mongodb_port,username,password,output_path))
 output_mongodb_rs_lagtime = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSecondaryReplicationInfo()' > {}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path))
-output_mongodb_rs_frag = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./get_colls_frag_ratio.js > {}/mongodb_rs_frag.txt".format(mongodb_port,username,password,output_path))
-output_mongodb_colls_stats = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./get_colls_stats.js > {}/mongodb_colls_stats.txt".format(mongodb_port,username,password,output_path))
-output_mongodb_indexes = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./get_indexes.js > {}/mongodb_indexes.txt".format(mongodb_port,username,password,output_path))
+output_mongodb_dbstats = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_dbstats.js > {}/mongodb_dbstats.txt".format(mongodb_port,username,password,output_path))
+output_mongodb_rs_frag = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_colls_frag_ratio.js > {}/mongodb_rs_frag.txt".format(mongodb_port,username,password,output_path))
+output_mongodb_colls_stats = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_colls_stats.js > {}/mongodb_colls_stats.txt".format(mongodb_port,username,password,output_path))
+output_mongodb_indexes = read_process("mongo -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_indexes.js > {}/mongodb_indexes.txt".format(mongodb_port,username,password,output_path))
 
 # cp mongod.log
 read_process("cp {} {}/mongod.log.{}".format(log_path,output_path,today))

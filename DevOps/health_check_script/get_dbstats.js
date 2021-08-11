@@ -1,6 +1,9 @@
 // get all dbs stats //
-// db.getMongo().setSlaveOk()
-rs.secondaryOk();
+if(version <= 2){
+    db.getMongo().setSlaveOk();
+}else{
+    rs.secondaryOk();
+}
 
 var alldbs = db.getMongo().getDBNames();
 
