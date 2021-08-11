@@ -42,7 +42,7 @@ config_json = json.load(config_data)
 
 # script config
 today = date.today()
-hostname = read_process("hostname -f")
+hostname = read_process("hostname -f").strip()
 output_dir = "{}_health_check_{}".format(hostname,today)
 output_path = "./{}".format(output_dir)
 config_path = config_json["mongod_conf"]
@@ -59,7 +59,7 @@ with open("{}".format(config_path),"r") as config_data:
 log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
 mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
 mongod_pid = check_output(["pidof","-s","mongod"]).strip()
-mongod_version = re.findall(r"(v[\d.]+)",read_process("mongod --version")).split('.')[1].strip()
+mongod_version = re.findall(r"(v[\d.]+)",read_process("mongod --version"))[0].split('.')[1].strip()
 
 read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
 
