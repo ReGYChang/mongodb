@@ -42,7 +42,7 @@ config_json = json.load(config_data)
 
 # script config
 today = date.today()
-hostname = read_process("hostname -f").strip()
+hostname = read_process("hostname").strip()
 output_dir = "{}_health_check_{}".format(hostname,today)
 output_path = "./{}".format(output_dir)
 config_path = config_json["mongod_conf"]
