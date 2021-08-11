@@ -82,6 +82,7 @@ output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappin
 output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode > {}/zone_reclaim_mode.txt".format(output_path))
 output_readahead = read_process("blockdev --report > {}/readahead.txt".format(output_path))
 output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
+output_crontab = read_process("crontab -l > {}/crontab.txt".format(output_path))
 output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
 
 # mongo instance info
