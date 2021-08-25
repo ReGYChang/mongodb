@@ -1,4 +1,5 @@
 // get all collections space fragmentation ratio //
+
 if(version <= 2){
     db.getMongo().setSlaveOk();
 }else{
