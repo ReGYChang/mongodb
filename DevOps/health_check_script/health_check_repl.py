@@ -4,6 +4,7 @@ import sys
 import json
 from datetime import date
 from subprocess import check_output
+from utils import *
 
 toolbar_width = 30
 
@@ -16,25 +17,6 @@ sys.stdout.write("\b" * (toolbar_width+1)) # return to start of line, after '['
 def pb_flush():
     sys.stdout.write("#")
     sys.stdout.flush()
-
-
-def read_process(cmd, args=''):
-    fullcmd = '%s %s' % (cmd, args)
-    pipeout = os.popen(fullcmd)
-    try:
-        firstline = pipeout.readline()
-        cmd_not_found = re.search(
-            b'(not recognized|No such file|not found)',
-            firstline,
-            re.IGNORECASE
-        )
-        if cmd_not_found:
-            raise IOError('%s must be on your system path.' % cmd)
-        output = firstline + pipeout.read()
-    finally:
-        pb_flush()
-        pipeout.close()
-    return output
 
 # import configuration
 config_data = open('config.json')
