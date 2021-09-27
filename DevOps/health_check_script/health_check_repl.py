@@ -55,11 +55,11 @@ mongo_hosts = config_json["hosts"]
 
 for host in mongo_hosts:
     config_path = host["mongod_conf"]
-    name = host["name"]
+    mongod_name = host["name"]
     username = host["username"]
     password = host["password"]
 
-    read_process("mkdir")
+    read_process("mkdir {}/{}".format(output_dir,mongod_name))
 
     # read mongod.conf
     with open("{}".format(config_path),"r") as config_data:
@@ -78,20 +78,20 @@ for host in mongo_hosts:
     # mongo instance info
     output_mongodb_config = read_process("cat {} > {}/mongod_conf.txt".format(config_path,output_path))
     output_mongodb_version = read_process("/usr/bin/mongod -version > {}/mongodb_version.txt".format(output_path))
-    output_mongodb_serverStatus = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.serverStatus()' > {}/mongodb_serverStatus.txt".format(mongodb_port,username,password,output_path))
-    output_mongodb_rs_conf = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'rs.conf()' > {}/mongodb_rs_conf.txt".format(mongodb_port,username,password,output_path))
-    output_mongodb_rs_status = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'rs.status()' > {}/mongodb_rs_status.txt".format(mongodb_port,username,password,output_path))
-    output_mongodb_rs_oplog = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.getReplicationInfo()' > {}/mongodb_rs_oplog.txt".format(mongodb_port,username,password,output_path))
-    output_mongodb_fcv = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_fcv.js > {}/mongodb_fcv.txt".format(mongodb_port,username,password,output_path))
-    output_mongodb_dbstats = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_dbstats.js > {}/mongodb_dbstats.txt".format(mongodb_port,username,password,output_path))
-    output_mongodb_rs_frag = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_colls_frag_ratio.js > {}/mongodb_rs_frag.txt".format(mongodb_port,username,password,output_path))
-    output_mongodb_colls_stats = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_colls_stats.js > {}/mongodb_colls_stats.txt".format(mongodb_port,username,password,output_path))
-    output_mongodb_indexes = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_indexes.js > {}/mongodb_indexes.txt".format(mongodb_port,username,password,output_path))
+    output_mongodb_serverStatus = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.serverStatus()' > {}/{}/mongodb_serverStatus.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    output_mongodb_rs_conf = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'rs.conf()' > {}/{}/mongodb_rs_conf.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    output_mongodb_rs_status = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'rs.status()' > {}/{}/mongodb_rs_status.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    output_mongodb_rs_oplog = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.getReplicationInfo()' > {}/{}/mongodb_rs_oplog.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    output_mongodb_fcv = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_fcv.js > {}/{}/mongodb_fcv.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    output_mongodb_dbstats = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_dbstats.js > {}/{}/mongodb_dbstats.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    output_mongodb_rs_frag = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_colls_frag_ratio.js > {}/{}/mongodb_rs_frag.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    output_mongodb_colls_stats = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_colls_stats.js > {}/{}/mongodb_colls_stats.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    output_mongodb_indexes = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_indexes.js > {}/{}/mongodb_indexes.txt".format(mongodb_port,username,password,output_path,mongod_name))
 
     if int(mongod_version) <= 2:
-        output_mongodb_rs_lagtime = read_process("mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSlaveReplicationInfo()' > {}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path))
+        output_mongodb_rs_lagtime = read_process("mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSlaveReplicationInfo()' > {}/{}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path,mongod_name))
     else:
-        output_mongodb_rs_lagtime = read_process("mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSecondaryReplicationInfo()' > {}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path))
+        output_mongodb_rs_lagtime = read_process("mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSecondaryReplicationInfo()' > {}/{}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path,mongod_name))
 
 # cp mongod.log
 #read_process("cp {} {}/mongod.log.{}".format(log_path,output_path,today))
