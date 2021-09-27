@@ -5,23 +5,12 @@ from datetime import date
 from subprocess import check_output
 from utils import *
 
-toolbar_width = 30
-
-# setup toolbar
-sys.stdout.write("[%s]" % (" " * toolbar_width))
-sys.stdout.flush()
-sys.stdout.write("\b" * (toolbar_width+1)) # return to start of line, after '['
-
-
-def pb_flush():
-    sys.stdout.write("#")
-    sys.stdout.flush()
-
 # script config
 today = date.today()
 hostname = read_process("hostname").strip()
 output_dir = "{}_health_check_{}".format(hostname,today)
 output_path = "./{}".format(output_dir)
+mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 
 # linux info
 output_mkdir = read_process("mkdir {}".format(output_dir))
@@ -43,7 +32,7 @@ output_noatime = read_process("cat /etc/fstab > {}/noatime.txt".format(output_pa
 output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappiness.txt".format(output_path))
 output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode > {}/vm_zone_reclaim_mode.txt".format(output_path))
 output_readahead = read_process("blockdev --report > {}/readahead.txt".format(output_path))
-output_ntpstat = read_process("ntpstat > {}/ntpstat.txt".format(output_path))
+output_selinux = read_process("cat /etc/selinux/config > {}/selinux.txt".format(output_path))
 output_crontab = read_process("crontab -u mongod -l")
 output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
 
@@ -59,7 +48,7 @@ for host in mongo_hosts:
     username = host["username"]
     password = host["password"]
 
-    read_process("mkdir {}/{}".format(output_dir,mongod_name))
+    read_process("mkdir -p {}/{}".format(output_dir,mongod_name))
 
     # read mongod.conf
     with open("{}".format(config_path),"r") as config_data:
@@ -70,7 +59,6 @@ for host in mongo_hosts:
 
     log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
     mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
-    mongod_pid = check_output(["pidof","-s","mongod"]).strip()
     mongod_version = re.findall(r"(v[\d.]+)",read_process("mongod --version"))[0].split('.')[1].strip()
 
     read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
@@ -99,4 +87,4 @@ for host in mongo_hosts:
 # compress output files
 output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
 
-sys.stdout.write("]\n") # this ends the progress bar
+sys.stdout.write(" ]\n") # this ends the progress bar

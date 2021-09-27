@@ -1,5 +1,7 @@
 import os
 import re
+import time
+import sys
 
 def read_process(cmd, args=''):
     fullcmd = '%s %s' % (cmd, args)
@@ -17,3 +19,16 @@ def read_process(cmd, args=''):
     finally:
         pipeout.close()
     return output
+
+total = 1007
+bar_length = 30
+index = 0
+def pb_flush():
+    percent = 100.0*i / total
+    sys.stdout.write('\r')
+    sys.stdout.write("Healch Check Progress: [{:{}}] {:>3}%"
+                     .format('='*int(percent/(100.0/bar_length)),
+                             bar_length, int(percent)))
+    sys.stdout.flush()
+    index++
+    time.sleep(0.002)
