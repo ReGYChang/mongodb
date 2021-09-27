@@ -23,8 +23,6 @@ hostname = read_process("hostname").strip()
 output_dir = "{}_health_check_{}".format(hostname,today)
 output_path = "./{}".format(output_dir)
 
-read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
-
 # linux info
 output_mkdir = read_process("mkdir {}".format(output_dir))
 output_osVersion = read_process("cat /etc/redhat-release > {}/os-version.txt".format(output_path))
@@ -74,6 +72,8 @@ for host in mongo_hosts:
     mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
     mongod_pid = check_output(["pidof","-s","mongod"]).strip()
     mongod_version = re.findall(r"(v[\d.]+)",read_process("mongod --version"))[0].split('.')[1].strip()
+
+    read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
 
     # mongo instance info
     output_mongodb_config = read_process("cat {} > {}/mongod_conf.txt".format(config_path,output_path))
