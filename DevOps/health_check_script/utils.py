@@ -5,7 +5,7 @@ import sys
 
 def read_process(cmd, args='processing...'):
     fullcmd = '%s %s' % (cmd, args)
-    pipeout = os.popen(fullcmd)
+    pipeout = os.popen(cmd)
     try:
         firstline = pipeout.readline()
         cmd_not_found = re.search(
@@ -40,14 +40,16 @@ def mongosh(**args):
     read_process(sh_args,args['task_name'])
 
 total = 37
-bar_length = 30
+bar_length = 40
 index = 0
 def pb_flush(task):
     global index
     percent = 100.0 * index / total
-    sys.stdout.write('\r')
-    sys.stdout.write("{}: [{:{}}] {:>3}%"
-                     .format(task.ljust(20,' '),'='*int(percent/(100.0/bar_length)),
+    if percent >= 100:
+        task = "  Health Check Completed!  ".center(30,'#')
+    sys.stdout.write('\r\n')
+    sys.stdout.write("##{}##: [{:{}}] {:>3}%"
+                     .format(task.center(30,' '),'='*int(percent/(100.0/bar_length)),
                              bar_length, int(percent)))
     sys.stdout.flush()
     index += 1
