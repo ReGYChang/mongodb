@@ -1,36 +1,62 @@
 package org.omni.mongo;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.*;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+import java.io.FileInputStream;
+import java.security.KeyStore;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class Main {
     public static void main(String[] args){
         try{
-            MongoClientURI uri = new MongoClientURI("mongodb://admin:admin@xxx.xxx.xxx.xxx:27017/?authSource=admin");
-            MongoClient client = new MongoClient(uri);
-            MongoDatabase test = client.getDatabase("test");
-            MongoCollection<Document> ha_test = test.getCollection("ha_test");
+            System.setProperty("javax.net.ssl.trustStore","mongo-java-driver/src/main/resources/tls/ca-cert");
+            System.setProperty("javax.net.ssl.trustStorePassword","regy0415");
+            System.setProperty("javax.net.ssl.keyStore","mongo-java-driver/src/main/resources/tls/keystore");
+            System.setProperty("javax.net.ssl.keyStorePassword","regy0415");
+//            MongoClient mongoClient = MongoClients.create("mongodb://admin:admin@34.80.142.158:27017/?authSource=admin&ssl=true");
 
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            ConnectionString connectionString = new ConnectionString("mongodb://admin:admin@35.185.161.184:27017/?authSource=admin");
 
-            System.out.println("Connect to database successfully!");
-            System.out.println("MongoDatabase info is : "+test.getName());
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+            KeyStore ks = KeyStore.getInstance("JKS");
+            KeyStore tks = KeyStore.getInstance("JKS");
+            ks.load(new FileInputStream("C:\\Users\\71414\\GitHub\\mongodb-examples\\mongo-java-driver\\src\\main\\resources\\tls\\keystore"), System.getProperty("javax.net.ssl.keyStorePassword").toCharArray());
+            tks.load(new FileInputStream("C:\\Users\\71414\\GitHub\\mongodb-examples\\mongo-java-driver\\src\\main\\resources\\tls\\ca-cert"), System.getProperty("javax.net.ssl.trustStorePassword").toCharArray());
 
-            for (int i = 100475; i <= 150000; i++){
-                Date date = new Date();
-                MongoCollection coll = test.getCollection("ha_test");
-                Document doc = new Document("name", "HA")
-                        .append("ns", i)
-                        .append("ts", date);
-                ha_test.insertOne(doc);
-            }
+            kmf.init(ks, System.getProperty("javax.net.ssl.keyStorePassword").toCharArray());
+            tmf.init(tks);
+
+            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+
+//            sslContext.init(null,null,null);
+            MongoClientSettings settings = MongoClientSettings.builder()
+                .applyToSslSettings(builder -> {
+                    builder.enabled(true);
+                    builder.context(sslContext);
+                    builder.invalidHostNameAllowed(true);
+                })
+                .applyConnectionString(connectionString)
+                .build();
+
+            MongoClient mongoClient = MongoClients.create(settings);
+
+            List<Document> databases = mongoClient.listDatabases().into(new ArrayList<>());
+            databases.forEach(db -> System.out.println(db.toJson()));
+
         }catch (Exception e){
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }

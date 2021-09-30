@@ -33,7 +33,7 @@ output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappin
 output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode > {}/vm_zone_reclaim_mode.txt".format(output_path))
 output_readahead = read_process("blockdev --report > {}/readahead.txt".format(output_path))
 output_selinux = read_process("cat /etc/selinux/config > {}/selinux.txt".format(output_path))
-output_crontab = read_process("crontab -u mongod -l")
+#output_crontab = read_process("crontab -u mongod -l")
 output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
 
 # import configuration
@@ -61,6 +61,17 @@ for host in mongo_hosts:
     mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
     mongod_version = re.findall(r"(v[\d.]+)",read_process("mongod --version"))[0].split('.')[1].strip()
 
+    if re.match(r"tls",mongod_conf,re.I) != None:
+        isTls = True
+        tlsCertificateKeyFile = re.findall(r"certificateKeyFile.+",mongod_conf)[0].split(":")[1].strip()
+        tlsCAFile = re.findall(r"CAFile.+",mongod_conf)[0].split(":")[1].strip()
+        tlsCertificateKeyFilePassword = re.findall(r"certificateKeyFilePassword.+",mongod_conf)[0].split(":")[1].strip()
+    else:
+        isTls = False
+        tlsCertificateKeyFile = ""
+        tlsCAFile = ""
+        tlsCertifacateKeyFilePassword = ""
+
     read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
 
     # mongo instance info
@@ -76,6 +87,19 @@ for host in mongo_hosts:
     output_mongodb_colls_stats = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_colls_stats.js > {}/{}/mongodb_colls_stats.txt".format(mongodb_port,username,password,output_path,mongod_name))
     output_mongodb_indexes = read_process("/usr/bin/mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin ./vars.js ./get_indexes.js > {}/{}/mongodb_indexes.txt".format(mongodb_port,username,password,output_path,mongod_name))
 
+    output_mongodb_indexes = mongosh(port=mongodb_port,\
+        username=username,\
+        password=password,\
+        isTls=isTls,\
+        tlsCAFile=tlsCAFile,\
+        tlsCertificateKeyFile=tlsCertificateKeyFile,\
+        tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
+        isEval=False,\
+        js="get_indexes.js",\
+        output_path=output_path,\
+        mongod_name=mongod_name,\
+        task_name="Collect Indexes")
+
     if int(mongod_version) <= 2:
         output_mongodb_rs_lagtime = read_process("mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSlaveReplicationInfo()' > {}/{}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path,mongod_name))
     else:
@@ -87,4 +111,4 @@ for host in mongo_hosts:
 # compress output files
 output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
 
-sys.stdout.write(" ]\n") # this ends the progress bar
+
