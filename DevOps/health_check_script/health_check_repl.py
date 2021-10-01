@@ -160,7 +160,7 @@ for host in mongo_hosts:
         tlsCertificateKeyFile=tlsCertificateKeyFile,\
         tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
         isEval=False,\
-        js="mongodb_dbstats.js",\
+        js="get_dbstats.js",\
         output_path=output_path,\
         mongod_name=mongod_name,\
         task_name="mongodb_dbstats")
@@ -204,10 +204,23 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_indexes")
 
-    if int(mongod_version) <= 2:
-        output_mongodb_rs_lagtime = read_process("mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSlaveReplicationInfo()' > {}/{}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path,mongod_name))
-    else:
-        output_mongodb_rs_lagtime = read_process("mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSecondaryReplicationInfo()' > {}/{}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    output_mongodb_rs_lagtime = mongosh(port=mongodb_port,\
+        username=username,\
+        password=password,\
+        isTls=isTls,\
+        tlsCAFile=tlsCAFile,\
+        tlsCertificateKeyFile=tlsCertificateKeyFile,\
+        tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
+        isEval=False,\
+        js="get_rs_lagtime.js",\
+        output_path=output_path,\
+        mongod_name=mongod_name,\
+        task_name="mongodb_rs_lagtime")
+
+    # if int(mongod_version) <= 2:
+    #     output_mongodb_rs_lagtime = read_process("mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSlaveReplicationInfo()' > {}/{}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path,mongod_name))
+    # else:
+    #     output_mongodb_rs_lagtime = read_process("mongo --quiet -port {} -u {} -p {} --authenticationDatabase admin --eval 'db.printSecondaryReplicationInfo()' > {}/{}/mongodb_rs_lagtime.txt".format(mongodb_port,username,password,output_path,mongod_name))
 
 # cp mongod.log
 #read_process("cp {} {}/mongod.log.{}".format(log_path,output_path,today))

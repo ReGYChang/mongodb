@@ -8,11 +8,3 @@
         }
     ]
 }
-
-{'username': u'admin', 'tlsCAFile': '/etc/mongodb/tls/example-ca-pub.crt',
-     'tlsCertificateKeyFile': '/etc/mongodb/tls/mongod7.pem', 
-     'isEval': False, 'tlsCertificateKeyFilePassword': 'regy0415',
-      'isTls': True, 'js': 'get_indexes.js', 
-      'output_path': './mongodb-ansible-7_health_check_2021-09-30', 
-      'task_name': 'mongodb_indexes', 'password': u'admin', 'mongod_name': u'rs0_0', 
-      'port': '27017'}
