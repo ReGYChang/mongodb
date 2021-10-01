@@ -16,28 +16,6 @@ mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 read_process("mkdir {}".format(output_dir))
 
 # linux info
-# output_osVersion = read_process("cat /etc/redhat-release > {}/os-version.txt".format(output_path))
-# output_cpu_info = read_process("cat /proc/cpuinfo > {}/cpu-info.txt".format(output_path))
-# output_cpu_info2 = read_process("lscpu >> {}/cpu-info.txt".format(output_path))
-# output_ps_mem = read_process("ps aux --sort -rss | head")
-# output_ps_cpu = read_process("ps aux --sort -pcpu | head")
-# output_mem_info = read_process("free -h > {}/mem-info.txt".format(output_path))
-# output_disk_info_block = read_process("lsblk > {}/disk-info.txt".format(output_path))
-# output_disk_info_fs = read_process("df -h >> {}/disk-info.txt".format(output_path))
-# output_network_info = read_process("ip addr > {}/network-info.txt".format(output_path))
-# output_uptime = read_process("uptime > {}/uptime.txt".format(output_path))
-# output_numa = read_process("cat /proc/cmdline >> {}/numa.txt".format(output_path))
-# output_numa = read_process("dmesg | grep -i numa >> {}/numa.txt".format(output_path))
-# output_thp_defrag = read_process("cat /sys/kernel/mm/transparent_hugepage/defrag > {}/thp_defrag.txt".format(output_path))
-# output_thp_enabled = read_process("cat /sys/kernel/mm/transparent_hugepage/enabled > {}/thp_enabled.txt".format(output_path))
-# output_noatime = read_process("cat /etc/fstab > {}/noatime.txt".format(output_path))
-# output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappiness.txt".format(output_path))
-# output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode > {}/vm_zone_reclaim_mode.txt".format(output_path))
-# output_readahead = read_process("blockdev --report > {}/readahead.txt".format(output_path))
-# output_selinux = read_process("cat /etc/selinux/config > {}/selinux.txt".format(output_path))
-#output_crontab = read_process("crontab -u mongod -l")
-# output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
-
 output_osVersion = bashsh(cmd="cat",\
         args=["/etc/redhat-release"],\
         output_path=output_path,\
@@ -196,9 +174,6 @@ for host in mongo_hosts:
     read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
 
     # mongo instance info
-    # output_mongodb_config = read_process("cat {} > {}/mongod_conf.txt".format(config_path,output_path))
-    # output_mongodb_version = read_process("/usr/bin/mongod -version > {}/mongodb_version.txt".format(output_path))
-    
     output_mongodb_config = bashsh(cmd="cat",\
         args=[config_path],\
         output_path=output_path,\
@@ -340,9 +315,6 @@ for host in mongo_hosts:
         output_path=output_path,\
         mongod_name=mongod_name,\
         task_name="mongodb_rs_lagtime")
-
-# cp mongod.log
-#read_process("cp {} {}/mongod.log.{}".format(log_path,output_path,today))
 
 # compress output files
 output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
