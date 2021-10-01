@@ -202,12 +202,14 @@ for host in mongo_hosts:
     output_mongodb_config = bashsh(cmd="cat",\
         args=[config_path],\
         output_path=output_path,\
-        task_name="mongodb_config")
+        task_name="mongodb_config",\
+        append=False)
 
     output_mongodb_version = bashsh(cmd="/usr/bin/mongod",\
         args=["-version"],\
         output_path=output_path,\
-        task_name="mongodb_version")
+        task_name="mongodb_version",\
+        append=False)
     
     output_mongodb_serverStatus = mongosh(port=mongodb_port,\
         username=username,\
