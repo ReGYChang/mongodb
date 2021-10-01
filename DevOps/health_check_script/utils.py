@@ -3,8 +3,8 @@ import re
 import time
 import sys
 
-def read_process(cmd, task='processing...'):
-    fullcmd = '%s %s' % (cmd, task)
+def read_process(cmd, args=''):
+    fullcmd = '%s %s' % (cmd, args)
     pipeout = os.popen(cmd)
     try:
         firstline = pipeout.readline()
@@ -16,7 +16,7 @@ def read_process(cmd, task='processing...'):
         if cmd_not_found:
             raise IOError('%s must be on your system path.' % cmd)
         output = firstline + pipeout.read()
-        pb_flush(task)
+        # pb_flush(task)
     finally:
         pipeout.close()
     return output
@@ -26,7 +26,8 @@ def bashsh(**args):
     for arg in args['args']:
         sh_args += ' ' + arg
     sh_args += " > {}/{}.txt".format(args['output_path'],args['task_name'])
-    read_process(sh_args,args['task_name'])
+    pb_flush(args['task_name'])
+    read_process(sh_args)
 
 def mongosh(**args):
     sh_args = "mongo \
@@ -45,7 +46,8 @@ def mongosh(**args):
     else:
         sh_args += " ./vars.js ./{}".format(args['js'])
     sh_args += " > {}/{}/{}.txt".format(args['output_path'],args['mongod_name'],args['task_name'])
-    read_process(sh_args,args['task_name'])
+    pb_flush(args['task_name'])
+    read_process(sh_args)
 
 total = 37
 bar_length = 40

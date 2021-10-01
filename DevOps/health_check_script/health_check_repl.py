@@ -39,7 +39,6 @@ output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod
 # import configuration
 config_data = open('config.json')
 config_json = json.load(config_data)
-
 mongo_hosts = config_json["hosts"]
 
 for host in mongo_hosts:
@@ -75,9 +74,14 @@ for host in mongo_hosts:
     read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
 
     # mongo instance info
-    output_mongodb_config = read_process("cat {} > {}/mongod_conf.txt".format(config_path,output_path))
+    # output_mongodb_config = read_process("cat {} > {}/mongod_conf.txt".format(config_path,output_path))
     # output_mongodb_version = read_process("/usr/bin/mongod -version > {}/mongodb_version.txt".format(output_path))
     
+    output_mongodb_config = bashsh(cmd="cat",\
+        args=[config_path],\
+        output_path=output_path,\
+        task_name="mongodb_config")
+
     output_mongodb_version = bashsh(cmd="/usr/bin/mongod",\
         args=["-version"],\
         output_path=output_path,\
