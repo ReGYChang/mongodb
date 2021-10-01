@@ -79,7 +79,7 @@ for host in mongo_hosts:
     # output_mongodb_version = read_process("/usr/bin/mongod -version > {}/mongodb_version.txt".format(output_path))
     
     output_mongodb_version = bashsh(cmd="/usr/bin/mongod",\
-        args[0]="-version",\
+        args=["-version"],\
         output_path=output_path,\
         task_name="mongodb_version")
     
