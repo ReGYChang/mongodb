@@ -51,7 +51,8 @@ output_cpu_info = bashsh(cmd="cat",\
 output_cpu_info2 = bashsh(cmd="lscpu",\
         args=[""],\
         output_path=output_path,\
-        task_name="cpu-info",True)
+        task_name="cpu-info",\
+        append=True)
 
 output_ps_mem = bashsh(cmd="ps",\
         args=["aux","--sort","-rss","| head"],\
@@ -76,7 +77,8 @@ output_disk_info_block = bashsh(cmd="lsblk",\
 output_disk_info_fs = bashsh(cmd="df",\
         args=["-h"],\
         output_path=output_path,\
-        task_name="disk-info",True)
+        task_name="disk-info",\
+        append=True)
 
 output_network_info = bashsh(cmd="ip addr",\
         args=[""],\
@@ -96,7 +98,8 @@ output_numa_info = bashsh(cmd="cat",\
 output_numa_info2 = bashsh(cmd="dmesg",\
         args=["| grep -i numa"],\
         output_path=output_path,\
-        task_name="numa2",True)
+        task_name="numa2",\
+        append=True)
 
 output_thp_defrag = bashsh(cmd="cat",\
         args=["/sys/kernel/mm/transparent_hugepage/defrag"],\
