@@ -46,10 +46,11 @@ def pb_flush(task):
     global index
     percent = 100.0 * index / total
     if percent >= 100:
-        task = "  Health Check Completed!  ".center(30,'#')
+        task = "## \033[32mHealth Check Completed!\033[0m  ##"
     sys.stdout.write('\r\n')
     sys.stdout.write("##{}##: [{:{}}] {:>3}%"
                      .format(task.center(30,' '),'='*int(percent/(100.0/bar_length)),
                              bar_length, int(percent)))
     sys.stdout.flush()
     index += 1
+    time.sleep(0.02)
