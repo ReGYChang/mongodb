@@ -5,7 +5,7 @@ from datetime import date
 from subprocess import check_output
 from utils import *
 
-# script config
+# import script config
 today = date.today()
 hostname = read_process("hostname").strip()
 output_dir = "{}_health_check_{}".format(hostname,today)
@@ -15,7 +15,7 @@ mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 # create health check dir
 read_process("mkdir {}".format(output_dir))
 
-# linux info
+# collect linux info
 output_osVersion = bashsh(cmd="cat",\
         args=["/etc/redhat-release"],\
         output_path=output_path,\
@@ -136,7 +136,7 @@ output_ulimit = bashsh(cmd="cat",\
         task_name="ulimit",\
         append=False)
 
-# import configuration
+# import mongodb configuration
 config_data = open('config.json')
 config_json = json.load(config_data)
 mongo_hosts = config_json["hosts"]
@@ -173,7 +173,7 @@ for host in mongo_hosts:
 
     read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
 
-    # mongo instance info
+    # collect mongo instance info
     output_mongodb_config = bashsh(cmd="cat",\
         args=[config_path],\
         output_path=output_path,\
@@ -316,7 +316,7 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_rs_lagtime")
 
-# compress output files
+# compress output health check files
 output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
 
 # health check end
