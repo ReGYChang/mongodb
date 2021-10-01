@@ -12,29 +12,131 @@ output_dir = "{}_health_check_{}".format(hostname,today)
 output_path = "./{}".format(output_dir)
 mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 
+# create health check dir
+read_process("mkdir {}".format(output_dir))
+
 # linux info
-output_mkdir = read_process("mkdir {}".format(output_dir))
-output_osVersion = read_process("cat /etc/redhat-release > {}/os-version.txt".format(output_path))
-output_cpu_info = read_process("cat /proc/cpuinfo > {}/cpu-info.txt".format(output_path))
-output_cpu_info2 = read_process("lscpu >> {}/cpu-info.txt".format(output_path))
-output_ps_mem = read_process("ps aux --sort -rss | head")
-output_ps_cpu = read_process("ps aux --sort -pcpu | head")
-output_mem_info = read_process("free -h > {}/mem-info.txt".format(output_path))
-output_disk_info_block = read_process("lsblk > {}/disk-info.txt".format(output_path))
-output_disk_info_fs = read_process("df -h >> {}/disk-info.txt".format(output_path))
-output_network_info = read_process("ip addr > {}/network-info.txt".format(output_path))
-output_uptime = read_process("uptime > {}/uptime.txt".format(output_path))
-output_numa = read_process("cat /proc/cmdline >> {}/numa.txt".format(output_path))
-output_numa = read_process("dmesg | grep -i numa >> {}/numa.txt".format(output_path))
-output_thp_defrag = read_process("cat /sys/kernel/mm/transparent_hugepage/defrag > {}/thp_defrag.txt".format(output_path))
-output_thp_enabled = read_process("cat /sys/kernel/mm/transparent_hugepage/enabled > {}/thp_enabled.txt".format(output_path))
-output_noatime = read_process("cat /etc/fstab > {}/noatime.txt".format(output_path))
-output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappiness.txt".format(output_path))
-output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode > {}/vm_zone_reclaim_mode.txt".format(output_path))
-output_readahead = read_process("blockdev --report > {}/readahead.txt".format(output_path))
-output_selinux = read_process("cat /etc/selinux/config > {}/selinux.txt".format(output_path))
+# output_osVersion = read_process("cat /etc/redhat-release > {}/os-version.txt".format(output_path))
+# output_cpu_info = read_process("cat /proc/cpuinfo > {}/cpu-info.txt".format(output_path))
+# output_cpu_info2 = read_process("lscpu >> {}/cpu-info.txt".format(output_path))
+# output_ps_mem = read_process("ps aux --sort -rss | head")
+# output_ps_cpu = read_process("ps aux --sort -pcpu | head")
+# output_mem_info = read_process("free -h > {}/mem-info.txt".format(output_path))
+# output_disk_info_block = read_process("lsblk > {}/disk-info.txt".format(output_path))
+# output_disk_info_fs = read_process("df -h >> {}/disk-info.txt".format(output_path))
+# output_network_info = read_process("ip addr > {}/network-info.txt".format(output_path))
+# output_uptime = read_process("uptime > {}/uptime.txt".format(output_path))
+# output_numa = read_process("cat /proc/cmdline >> {}/numa.txt".format(output_path))
+# output_numa = read_process("dmesg | grep -i numa >> {}/numa.txt".format(output_path))
+# output_thp_defrag = read_process("cat /sys/kernel/mm/transparent_hugepage/defrag > {}/thp_defrag.txt".format(output_path))
+# output_thp_enabled = read_process("cat /sys/kernel/mm/transparent_hugepage/enabled > {}/thp_enabled.txt".format(output_path))
+# output_noatime = read_process("cat /etc/fstab > {}/noatime.txt".format(output_path))
+# output_vm_swappiness = read_process("cat /proc/sys/vm/swappiness > {}/vm_swappiness.txt".format(output_path))
+# output_vm_zone_reclaim_mode = read_process("cat /proc/sys/vm/zone_reclaim_mode > {}/vm_zone_reclaim_mode.txt".format(output_path))
+# output_readahead = read_process("blockdev --report > {}/readahead.txt".format(output_path))
+# output_selinux = read_process("cat /etc/selinux/config > {}/selinux.txt".format(output_path))
 #output_crontab = read_process("crontab -u mongod -l")
-output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
+# output_ulimit = read_process("cat /proc/{}/limits > {}/ulimit.txt".format(mongod_pid,output_path))
+
+output_osVersion = bashsh(cmd="cat",\
+        args=["/etc/redhat-release"],\
+        output_path=output_path,\
+        task_name="os-version")
+
+output_cpu_info = bashsh(cmd="cat",\
+        args=["/proc/cpuinfo"],\
+        output_path=output_path,\
+        task_name="cpu-info")
+
+output_cpu_info2 = bashsh(cmd="lscpu",\
+        args=[""],\
+        output_path=output_path,\
+        task_name="cpu-info",True)
+
+output_ps_mem = bashsh(cmd="ps",\
+        args=["aux","--sort","-rss","| head"],\
+        output_path=output_path,\
+        task_name="ps-mem")
+
+output_ps_cpu = bashsh(cmd="ps",\
+        args=["aux","--sort","-pcpu","| head"],\
+        output_path=output_path,\
+        task_name="ps-cpu")
+
+output_mem_info = bashsh(cmd="free",\
+        args=["-h"],\
+        output_path=output_path,\
+        task_name="mem-info")
+
+output_disk_info_block = bashsh(cmd="lsblk",\
+        args=[""],\
+        output_path=output_path,\
+        task_name="disk-info")
+
+output_disk_info_fs = bashsh(cmd="df",\
+        args=["-h"],\
+        output_path=output_path,\
+        task_name="disk-info",True)
+
+output_network_info = bashsh(cmd="ip addr",\
+        args=[""],\
+        output_path=output_path,\
+        task_name="network-info")
+
+output_uptime = bashsh(cmd="uptime",\
+        args=[""],\
+        output_path=output_path,\
+        task_name="uptime")
+
+output_numa_info = bashsh(cmd="cat",\
+        args=["/proc/cmdline"],\
+        output_path=output_path,\
+        task_name="numa1")
+
+output_numa_info2 = bashsh(cmd="dmesg",\
+        args=["| grep -i numa"],\
+        output_path=output_path,\
+        task_name="numa2",True)
+
+output_thp_defrag = bashsh(cmd="cat",\
+        args=["/sys/kernel/mm/transparent_hugepage/defrag"],\
+        output_path=output_path,\
+        task_name="thp_defrag")
+
+output_thp_enabled = bashsh(cmd="cat",\
+        args=["/sys/kernel/mm/transparent_hugepage/enabled"],\
+        output_path=output_path,\
+        task_name="thp_enabled")
+
+output_noatime = bashsh(cmd="cat",\
+        args=["/etc/fstab"],\
+        output_path=output_path,\
+        task_name="noatime")
+
+output_vm_swappiness = bashsh(cmd="cat",\
+        args=["/proc/sys/vm/swappiness"],\
+        output_path=output_path,\
+        task_name="vm_swappiness")
+
+output_vm_zone_reclaim_mode = bashsh(cmd="cat",\
+        args=["/proc/sys/vm/zone_reclaim_mode"],\
+        output_path=output_path,\
+        task_name="vm_zone_reclaim_mode")
+
+output_readahead = bashsh(cmd="blockdev",\
+        args=["--report"],\
+        output_path=output_path,\
+        task_name="readahead")
+
+output_selinux = bashsh(cmd="cat",\
+        args=["/etc/selinux/config"],\
+        output_path=output_path,\
+        task_name="selinux")
+
+output_ulimit = bashsh(cmd="cat",\
+        args=["/proc/{}/limits".format(mongod_pid)],\
+        output_path=output_path,\
+        task_name="ulimit")
 
 # import configuration
 config_data = open('config.json')

@@ -21,11 +21,14 @@ def read_process(cmd, args=''):
         pipeout.close()
     return output
 
-def bashsh(**args):
+def bashsh(**args,append=False):
     sh_args = args['cmd']
     for arg in args['args']:
         sh_args += ' ' + arg
-    sh_args += " > {}/{}.txt".format(args['output_path'],args['task_name'])
+    if append:
+        sh_args += " >> {}/{}.txt".format(args['output_path'],args['task_name'])
+    else:
+        sh_args += " > {}/{}.txt".format(args['output_path'],args['task_name'])
     pb_flush(args['task_name'])
     read_process(sh_args)
 
