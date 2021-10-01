@@ -3,8 +3,8 @@ import re
 import time
 import sys
 
-def read_process(cmd, args='processing...'):
-    fullcmd = '%s %s' % (cmd, args)
+def read_process(cmd, task='processing...'):
+    fullcmd = '%s %s' % (cmd, task)
     pipeout = os.popen(cmd)
     try:
         firstline = pipeout.readline()
@@ -16,13 +16,21 @@ def read_process(cmd, args='processing...'):
         if cmd_not_found:
             raise IOError('%s must be on your system path.' % cmd)
         output = firstline + pipeout.read()
-        pb_flush(args)
+        pb_flush(task)
     finally:
         pipeout.close()
     return output
 
+def bashsh(**args):
+    sh_args = args['cmd']
+    for arg in args['args']:
+        sh_args += ' ' + arg
+    sh_args += " > {}/{}.txt".format(args['output_path'],args['task_name'])
+    read_process(sh_args,args['task_name'])
+
 def mongosh(**args):
     sh_args = "mongo \
+        --quiet \
         --port {} \
         -u {} \
         -p {} \
