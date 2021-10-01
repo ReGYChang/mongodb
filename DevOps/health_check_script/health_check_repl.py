@@ -41,12 +41,14 @@ read_process("mkdir {}".format(output_dir))
 output_osVersion = bashsh(cmd="cat",\
         args=["/etc/redhat-release"],\
         output_path=output_path,\
-        task_name="os-version")
+        task_name="os-version",\
+        append=False)
 
 output_cpu_info = bashsh(cmd="cat",\
         args=["/proc/cpuinfo"],\
         output_path=output_path,\
-        task_name="cpu-info")
+        task_name="cpu-info",\
+        append=False)
 
 output_cpu_info2 = bashsh(cmd="lscpu",\
         args=[""],\
@@ -57,22 +59,26 @@ output_cpu_info2 = bashsh(cmd="lscpu",\
 output_ps_mem = bashsh(cmd="ps",\
         args=["aux","--sort","-rss","| head"],\
         output_path=output_path,\
-        task_name="ps-mem")
+        task_name="ps-mem",\
+        append=False)
 
 output_ps_cpu = bashsh(cmd="ps",\
         args=["aux","--sort","-pcpu","| head"],\
         output_path=output_path,\
-        task_name="ps-cpu")
+        task_name="ps-cpu",\
+        append=False)
 
 output_mem_info = bashsh(cmd="free",\
         args=["-h"],\
         output_path=output_path,\
-        task_name="mem-info")
+        task_name="mem-info",\
+        append=False)
 
 output_disk_info_block = bashsh(cmd="lsblk",\
         args=[""],\
         output_path=output_path,\
-        task_name="disk-info")
+        task_name="disk-info",\
+        append=False)
 
 output_disk_info_fs = bashsh(cmd="df",\
         args=["-h"],\
@@ -83,17 +89,20 @@ output_disk_info_fs = bashsh(cmd="df",\
 output_network_info = bashsh(cmd="ip addr",\
         args=[""],\
         output_path=output_path,\
-        task_name="network-info")
+        task_name="network-info",\
+        append=False)
 
 output_uptime = bashsh(cmd="uptime",\
         args=[""],\
         output_path=output_path,\
-        task_name="uptime")
+        task_name="uptime",\
+        append=False)
 
 output_numa_info = bashsh(cmd="cat",\
         args=["/proc/cmdline"],\
         output_path=output_path,\
-        task_name="numa1")
+        task_name="numa1",\
+        append=False)
 
 output_numa_info2 = bashsh(cmd="dmesg",\
         args=["| grep -i numa"],\
@@ -104,42 +113,50 @@ output_numa_info2 = bashsh(cmd="dmesg",\
 output_thp_defrag = bashsh(cmd="cat",\
         args=["/sys/kernel/mm/transparent_hugepage/defrag"],\
         output_path=output_path,\
-        task_name="thp_defrag")
+        task_name="thp_defrag",\
+        append=False)
 
 output_thp_enabled = bashsh(cmd="cat",\
         args=["/sys/kernel/mm/transparent_hugepage/enabled"],\
         output_path=output_path,\
-        task_name="thp_enabled")
+        task_name="thp_enabled",\
+        append=False)
 
 output_noatime = bashsh(cmd="cat",\
         args=["/etc/fstab"],\
         output_path=output_path,\
-        task_name="noatime")
+        task_name="noatime",\
+        append=False)
 
 output_vm_swappiness = bashsh(cmd="cat",\
         args=["/proc/sys/vm/swappiness"],\
         output_path=output_path,\
-        task_name="vm_swappiness")
+        task_name="vm_swappiness",\
+        append=False)
 
 output_vm_zone_reclaim_mode = bashsh(cmd="cat",\
         args=["/proc/sys/vm/zone_reclaim_mode"],\
         output_path=output_path,\
-        task_name="vm_zone_reclaim_mode")
+        task_name="vm_zone_reclaim_mode",\
+        append=False)
 
 output_readahead = bashsh(cmd="blockdev",\
         args=["--report"],\
         output_path=output_path,\
-        task_name="readahead")
+        task_name="readahead",\
+        append=False)
 
 output_selinux = bashsh(cmd="cat",\
         args=["/etc/selinux/config"],\
         output_path=output_path,\
-        task_name="selinux")
+        task_name="selinux",\
+        append=False)
 
 output_ulimit = bashsh(cmd="cat",\
         args=["/proc/{}/limits".format(mongod_pid)],\
         output_path=output_path,\
-        task_name="ulimit")
+        task_name="ulimit",\
+        append=False)
 
 # import configuration
 config_data = open('config.json')
