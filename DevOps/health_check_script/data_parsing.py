@@ -1,6 +1,8 @@
 import json
 import re
 from utils import *
+from datetime import date
+
 
 read_process("touch linux.json")
 
@@ -15,37 +17,45 @@ hostname = read_process("hostname").strip()
 output_dir = "{}_health_check_{}".format(hostname,today)
 output_path = "./{}".format(output_dir)
 
-path = '{}/cpu-info.txt'.format(output_path)
+path = '{}/cpu-info2.txt'.format(output_path)
 f = open(path,'r')
 cpu_info = f.read()
 cpu_cores = re.findall(r"^CPU\(s\).+\d",cpu_info,re.M)[0].split(":")[1].strip()
 cpu_model = re.findall(r"^Model name:.+",cpu_info,re.M)[0].split(":")[1].strip()
 hypervisor = re.findall(r"^Hypervisor.+",cpu_info,re.M)
+print("cpu cores: " + cpu_cores)
+print("cpu model: " + cpu_model)
+print("hypervisor: " + hypervisor)
 f.close()
 
 path = '{}/os-version.txt'.format(output_path)
 f = open(path,'r')
 os_version = f.read().strip()
+print("os version: " + os_version)
 f.close
 
 path = '{}/mem-info.txt'.format(output_path)
 f = open(path,'r')
 mem_info = f.read().strip()
-mem_space = re.findall(r"^Mem.+",mem_info)[0].split()[1]
-swap_space = re.findall(r"^Swap.+",mem_info)[0].split()[1]
+mem_space = re.findall(r"^Mem.+",mem_info,re.M)[0].split()[1]
+swap_space = re.findall(r"^Swap.+",mem_info,re.M)[0].split()[1]
 mem_swap = mem_space + '/' + swap_space
+print("mem swap space: " + mem_swap)
 f.close
 
-path = '{}/disk-info.txt'.format(output_path)
+path = '{}/disk-info2.txt'.format(output_path)
 f = open(path,'r')
 disk_info = f.read().strip()
-home_space_total = re.findall(r".+\/$",disk_info)[1].split()[1]
-home_space_used = re.findall(r".+\/$",disk_info)[1].split()[2]
+home_space_total = re.findall(r".+\/$",disk_info,re.M)[1].split()[1]
+home_space_used = re.findall(r".+\/$",disk_info,re.M)[1].split()[2]
+print("home space total: " + home_space_total)
+print("home space used: " + home_space_used)
 f.close
 
 path = '{}/uptime.txt'.format(output_path)
 f = open(path,'r')
 uptime = f.read().strip(',')[0]
+print("uptime: " + uptime)
 f.close
 
 path = '{}/ulimit.txt'.format(output_path)
@@ -53,6 +63,8 @@ f = open(path,'r')
 ulimit = f.read().strip()
 ulimit_nproc = re.findall(r"^Max processes.+",ulimit,re.M)[0].split()[2]
 ulimit_nofile = re.findall(r"^Max open files.+",ulimit,re.M)[0].split()[2]
+print("ulimit nproc: " + ulimit_nproc)
+print("ulimit nofile: " + ulimit_nofile)
 f.close
 
 # path = 'readahead.txt'
@@ -77,38 +89,45 @@ if len(re.findall(r"\[never\]",thp_defrag)) > 0:
     thp_defrag_flag = True
 else:
     thp_defrag_flag = False
+print("thp defrag flag: " + thp_defrag_flag)
 f.close
 
 path = '{}/vm_zone_reclaim_mode.txt'.format(output_path)
 f = open(path,'r')
 vm_zone_reclaim_mode = f.read().strip()
+print("vm zone reclaim mode: " + vm_zone_reclaim_mode)
 f.close
 
 path = '{}/vm_swappiness.txt'.format(output_path)
 f = open(path,'r')
 vm_swappiness = f.read().strip()
+print("vm swappiness: " + vm_swappiness)
 f.close
 
 path = '{}/mongodb_version.txt'.format(output_path)
 f = open(path,'r')
 mongodb_version = f.read().strip()
+print("mongodb version: " + mongodb_version)
 f.close
 
 path = '{}/{}/mongodb_fcv.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_fcv = f.read().strip()
 mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":").strip("\"")
+print("mongodb fcv: " + mongodb_fcv)
 f.close
 
 path = '{}/mongodb_port.txt'.format(output_path)
 f = open(path,'r')
 mongodb_port = f.read().strip()
+print("mongodb port: " + mongodb_port)
 f.close
 
 path = '{}/uptime.txt'.format(output_path)
 f = open(path,'r')
 uptime = f.read().strip()
 uptime = uptime.split(",")[0]
+print("uptime: " + uptime)
 f.close
 
 path = '{}/{}mongodb_serverStatus.txt'.format(output_path,mongod_name)
