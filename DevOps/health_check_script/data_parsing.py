@@ -46,23 +46,23 @@ f.close
 path = '{}/disk-info2.txt'.format(output_path)
 f = open(path,'r')
 disk_info = f.read().strip()
-home_space_total = re.findall(r".+\/$",disk_info,re.M)[1].split()[1]
-home_space_used = re.findall(r".+\/$",disk_info,re.M)[1].split()[2]
+home_space_total = re.findall(r".+\/$",disk_info,re.M)[0].split()[1]
+home_space_used = re.findall(r".+\/$",disk_info,re.M)[0].split()[2]
 print("home space total: " + home_space_total)
 print("home space used: " + home_space_used)
 f.close
 
 path = '{}/uptime.txt'.format(output_path)
 f = open(path,'r')
-uptime = f.read().strip(',')[0]
+uptime = f.read().strip('').split(",")[0]
 print("uptime: " + uptime)
 f.close
 
 path = '{}/ulimit.txt'.format(output_path)
 f = open(path,'r')
 ulimit = f.read().strip()
-ulimit_nproc = re.findall(r"^Max processes.+",ulimit,re.M)[0].split()[2]
-ulimit_nofile = re.findall(r"^Max open files.+",ulimit,re.M)[0].split()[2]
+ulimit_nproc = re.findall(r"^Max processes.+",ulimit,re.M)[0].split()[3]
+ulimit_nofile = re.findall(r"^Max open files.+",ulimit,re.M)[0].split()[4]
 print("ulimit nproc: " + ulimit_nproc)
 print("ulimit nofile: " + ulimit_nofile)
 f.close
@@ -89,7 +89,6 @@ if len(re.findall(r"\[never\]",thp_defrag)) > 0:
     thp_defrag_flag = True
 else:
     thp_defrag_flag = False
-print("thp defrag flag: " + thp_defrag_flag)
 f.close
 
 path = '{}/vm_zone_reclaim_mode.txt'.format(output_path)
@@ -106,14 +105,15 @@ f.close
 
 path = '{}/mongodb_version.txt'.format(output_path)
 f = open(path,'r')
-mongodb_version = f.read().strip()
+mongodb_version = f.read().strip("")
+mongodb_version = re.findall(r"v[\d.]+")[0]
 print("mongodb version: " + mongodb_version)
 f.close
 
 path = '{}/{}/mongodb_fcv.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_fcv = f.read().strip()
-mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":").strip("\"")
+mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":")[1].strip("\"")
 print("mongodb fcv: " + mongodb_fcv)
 f.close
 
@@ -130,7 +130,7 @@ uptime = uptime.split(",")[0]
 print("uptime: " + uptime)
 f.close
 
-path = '{}/{}mongodb_serverStatus.txt'.format(output_path,mongod_name)
+path = '{}/{}/mongodb_serverStatus.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_serverStatus = f.read().strip()
 serverStatus_uptime = re.findall(r"\"uptime\".+",mongodb_serverStatus)[0].split(":")[1]
