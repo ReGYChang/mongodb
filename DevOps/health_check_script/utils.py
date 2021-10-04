@@ -52,7 +52,7 @@ def mongosh(**args):
     pb_flush(args['task_name'])
     read_process(sh_args)
 
-total = 31
+total = 32
 bar_length = 40
 index = 0
 def pb_flush(task):
