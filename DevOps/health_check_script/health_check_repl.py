@@ -31,7 +31,7 @@ output_cpu_info = bashsh(cmd="cat",\
 output_cpu_info2 = bashsh(cmd="lscpu",\
         args=[""],\
         output_path=output_path,\
-        task_name="cpu-info",\
+        task_name="cpu-info2",\
         append=True)
 
 output_ps_mem = bashsh(cmd="ps",\
@@ -61,7 +61,7 @@ output_disk_info_block = bashsh(cmd="lsblk",\
 output_disk_info_fs = bashsh(cmd="df",\
         args=["-h"],\
         output_path=output_path,\
-        task_name="disk-info",\
+        task_name="disk-info2",\
         append=True)
 
 output_network_info = bashsh(cmd="ip addr",\
@@ -184,6 +184,12 @@ for host in mongo_hosts:
         args=["-version"],\
         output_path=output_path,\
         task_name="mongodb_version",\
+        append=False)
+
+    output_mongodb_port = bashsh(cmd="echo",\
+        args=[mongodb_port],\
+        output_path=output_path,\
+        task_name="mongodb_port",\
         append=False)
     
     output_mongodb_serverStatus = mongosh(port=mongodb_port,\

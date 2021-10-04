@@ -53,7 +53,7 @@ f.close
 path = 'thp_enabled.txt'
 f = open(path,'r')
 thp_enabled = f.read().strip()
-if len(re.findall(r"\[never\]")) > 0:
+if len(re.findall(r"\[never\]",thp_enabled)) > 0:
     thp_enabled_flag = True
 else:
     thp_enabled_flag = False
@@ -61,17 +61,8 @@ f.close
 
 path = 'thp_defrag.txt'
 f = open(path,'r')
-thp_enabled = f.read().strip()
-if len(re.findall(r"\[never\]")) > 0:
-    thp_defrag_flag = True
-else:
-    thp_defrag_flag = False
-f.close
-
-path = 'thp_defrag.txt'
-f = open(path,'r')
-thp_enabled = f.read().strip()
-if len(re.findall(r"\[never\]")) > 0:
+thp_defrag = f.read().strip()
+if len(re.findall(r"\[never\]",thp_defrag)) > 0:
     thp_defrag_flag = True
 else:
     thp_defrag_flag = False
@@ -86,3 +77,50 @@ path = 'vm_swappiness.txt'
 f = open(path,'r')
 vm_swappiness = f.read().strip()
 f.close
+
+path = 'mongodb_version.txt'
+f = open(path,'r')
+mongodb_version = f.read().strip()
+f.close
+
+path = 'mongodb_fcv.txt'
+f = open(path,'r')
+mongodb_fcv = f.read().strip()
+mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":").strip("\"")
+f.close
+
+path = 'mongodb_port.txt'
+f = open(path,'r')
+mongodb_port = f.read().strip()
+f.close
+
+path = 'uptime.txt'
+f = open(path,'r')
+uptime = f.read().strip()
+uptime = uptime.split(",")[0]
+f.close
+
+path = 'mongodb_serverStatus.txt'
+f = open(path,'r')
+mongodb_serverStatus = f.read().strip()
+serverStatus_uptime = re.findall(r"\"uptime\".+",mongodb_serverStatus)[0].split(":")[1]
+serverStatus_asserts_warning = re.findall(r"\"warning\".+",mongodb_serverStatus)[0].split(":")[1]
+serverStatus_asserts_user = re.findall(r"\"user\".+",mongodb_serverStatus)[0].split(":")[1]
+serverStatus_connections = re.findall(r"\"connections\".+(\n.+){4}",mongodb_serverStatus)[0].split(":")[1]
+serverStatus_connections_current = re.findall(r"\"current\".+",serverStatus_connections)[0].split(":")[1]
+serverStatus_connections_available = re.findall(r"\"available\".+",serverStatus_connections)[0].split(":")[1]
+serverStatus_extra_info_page_faults = re.findall(r"\"page_fault\".+",mongodb_serverStatus)[0].split(":")[1]
+serverStatus_opLatencies_reads = re.findall(r"\"reads\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1]
+serverStatus_opLatencies_writes = re.findall(r"\"writes\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1]
+serverStatus_opLatencies_reads_latency = re.findall(r"\"latency\".+",serverStatus_opLatencies_reads)[0].split(":")[1]
+serverStatus_opLatencies_reads_ops = re.findall(r"\"ops\".+",serverStatus_opLatencies_reads)[0].split(":")[1]
+serverStatus_opLatencies_writes_latency = re.findall(r"\"latency\".+",serverStatus_opLatencies_writes)[0].split(":")[1]
+serverStatus_opLatencies_writes_ops = re.findall(r"\"ops\".+",serverStatus_opLatencies_writes)[0].split(":")[1]
+serverStatus_cursor_timedOut = re.findall(r"\"timedOut\".+",mongodb_serverStatus)[0].split(":")[1]
+serverStatus_operation_scanAndOrder = re.findall(r"\"scanAndOrder\".+",mongodb_serverStatus)[0].split(":")[1]
+serverStatus_operation_writeConflicts = re.findall(r"\"writeConflicts\".+",mongodb_serverStatus)[0].split(":")[1]
+f.close
+
+
+
+
