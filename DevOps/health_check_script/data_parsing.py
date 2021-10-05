@@ -105,7 +105,7 @@ f.close
 
 path = '{}/mongodb_version.txt'.format(output_path)
 f = open(path,'r')
-mongodb_version = f.read().strip("")
+mongodb_version = f.read().strip()
 mongodb_version = re.findall(r"v[\d.]+",mongodb_version)[0]
 print("mongodb version: " + mongodb_version)
 f.close
@@ -113,7 +113,7 @@ f.close
 path = '{}/{}/mongodb_fcv.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_fcv = f.read().strip()
-mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":")[1].strip("\"")
+mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":")[1].strip().strip("\"")
 print("mongodb fcv: " + mongodb_fcv)
 f.close
 
@@ -134,12 +134,12 @@ path = '{}/{}/mongodb_serverStatus.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_serverStatus = f.read().strip()
 
-serverStatus_uptime = re.findall(r"\"uptime\".+",mongodb_serverStatus)[0].split(":")[1]..strip().strip(',')
+serverStatus_uptime = re.findall(r"\"uptime\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 print("Server status uptime: " + serverStatus_uptime)
 
-serverStatus_asserts_warning = re.findall(r"\"warning\".+",mongodb_serverStatus)[0].split(":")[1]..strip().strip(',')
+serverStatus_asserts_warning = re.findall(r"\"warning\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 
-serverStatus_asserts_user = re.findall(r"\"user\".+",mongodb_serverStatus)[0].split(":")[1]..strip().strip(',')
+serverStatus_asserts_user = re.findall(r"\"user\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 print("Server status asserts user: " + serverStatus_asserts_user)
 
 # serverStatus_connections = re.findall(r"\"connections\".+(\n.+){4}",mongodb_serverStatus)[0].split(":")[1]
@@ -152,6 +152,7 @@ serverStatus_connections_available = re.findall(r"\"connections\"(.+\n){3}",mong
 print("Server status connections available: " + serverStatus_connections_available)
 
 serverStatus_extra_info_page_faults = re.findall(r"\"page_faults\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
+serverStatus_extra_info_page_faults = re.findall(r"\d+",serverStatus_extra_info_page_faults)
 print("Server status extra info page faults: " + serverStatus_extra_info_page_faults)
 
 # serverStatus_opLatencies_reads = re.findall(r"\"reads\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip()
@@ -160,25 +161,32 @@ print("Server status extra info page faults: " + serverStatus_extra_info_page_fa
 # serverStatus_opLatencies_writes = re.findall(r"\"writes\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip()
 # print("Server status oplatencies writes: " + serverStatus_opLatencies_writes)
 
-serverStatus_opLatencies_reads_latency = re.findall(r"\"reads\".+(\n.+){1}",mongodb_serverStatus)[0].split(":")[1].strip.strip().strip(',')
+serverStatus_opLatencies_reads_latency = re.findall(r"\"reads\".+(\n.+){1}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
+serverStatus_opLatencies_reads_latency = re.findall(r"\d+",serverStatus_opLatencies_reads_latency)
 print("Server status oplatencies reads latency: " + serverStatus_opLatencies_reads_latency)
 
 serverStatus_opLatencies_reads_ops = re.findall(r"\"reads\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
+serverStatus_opLatencies_reads_ops = re.findall(r"\d+",serverStatus_opLatencies_reads_ops)
 print("Server status oplatencies reads ops: " + serverStatus_opLatencies_reads_ops)
 
 serverStatus_opLatencies_writes_latency = re.findall(r"\"writes\".+(\n.+){1}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
+serverStatus_opLatencies_writes_latency = re.findall(r"\d+",serverStatus_opLatencies_writes_latency)
 print("Server status oplatencies writes latency: " + serverStatus_opLatencies_writes_latency)
 
 serverStatus_opLatencies_writes_ops = re.findall(r"\"writes\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
+serverStatus_opLatencies_writes_ops = re.findall(r"\d+",serverStatus_opLatencies_writes_ops)
 print("Server status oplatencies writes ops: " + serverStatus_opLatencies_writes_ops)
 
 serverStatus_cursor_timedOut = re.findall(r"\"timedOut\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
+serverStatus_cursor_timedOut = re.findall(r"\d+",serverStatus_cursor_timedOut)
 print("Server status cursor timedout: " + serverStatus_cursor_timedOut)
 
 serverStatus_operation_scanAndOrder = re.findall(r"\"scanAndOrder\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-print("Server status operation scan and order: " + serverStatus_operation_scanAndOrder)
+serverStatus_operation_scanAndOrder = re.findall(r"\d+",serverStatus_operation_scanAndOrder)
+print("Server status operation scan and order: " + serverops)
 
 serverStatus_operation_writeConflicts = re.findall(r"\"writeConflicts\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
+serverStatus_operation_writeConflicts = re.findall(r"\d+",serverStatus_operation_writeConflicts)
 print("Server status operation write conflicts: " + serverStatus_operation_writeConflicts)
 
 f.close
