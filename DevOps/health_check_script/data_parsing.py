@@ -152,7 +152,7 @@ serverStatus_connections_available = re.findall(r"\"connections\"(.+\n){3}",mong
 print("Server status connections available: " + serverStatus_connections_available)
 
 serverStatus_extra_info_page_faults = re.findall(r"\"page_faults\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-serverStatus_extra_info_page_faults = re.findall(r"\d+",serverStatus_extra_info_page_faults)
+serverStatus_extra_info_page_faults = re.findall(r"\d+",serverStatus_extra_info_page_faults)[0]
 print("Server status extra info page faults: " + serverStatus_extra_info_page_faults)
 
 # serverStatus_opLatencies_reads = re.findall(r"\"reads\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip()
@@ -162,31 +162,31 @@ print("Server status extra info page faults: " + serverStatus_extra_info_page_fa
 # print("Server status oplatencies writes: " + serverStatus_opLatencies_writes)
 
 serverStatus_opLatencies_reads_latency = re.findall(r"\"reads\".+(\n.+){1}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-serverStatus_opLatencies_reads_latency = re.findall(r"\d+",serverStatus_opLatencies_reads_latency)
+serverStatus_opLatencies_reads_latency = re.findall(r"\d+",serverStatus_opLatencies_reads_latency)[0]
 print("Server status oplatencies reads latency: " + serverStatus_opLatencies_reads_latency)
 
 serverStatus_opLatencies_reads_ops = re.findall(r"\"reads\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-serverStatus_opLatencies_reads_ops = re.findall(r"\d+",serverStatus_opLatencies_reads_ops)
+serverStatus_opLatencies_reads_ops = re.findall(r"\d+",serverStatus_opLatencies_reads_ops)[0]
 print("Server status oplatencies reads ops: " + serverStatus_opLatencies_reads_ops)
 
 serverStatus_opLatencies_writes_latency = re.findall(r"\"writes\".+(\n.+){1}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-serverStatus_opLatencies_writes_latency = re.findall(r"\d+",serverStatus_opLatencies_writes_latency)
+serverStatus_opLatencies_writes_latency = re.findall(r"\d+",serverStatus_opLatencies_writes_latency)[0]
 print("Server status oplatencies writes latency: " + serverStatus_opLatencies_writes_latency)
 
 serverStatus_opLatencies_writes_ops = re.findall(r"\"writes\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-serverStatus_opLatencies_writes_ops = re.findall(r"\d+",serverStatus_opLatencies_writes_ops)
+serverStatus_opLatencies_writes_ops = re.findall(r"\d+",serverStatus_opLatencies_writes_ops)[0]
 print("Server status oplatencies writes ops: " + serverStatus_opLatencies_writes_ops)
 
 serverStatus_cursor_timedOut = re.findall(r"\"timedOut\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-serverStatus_cursor_timedOut = re.findall(r"\d+",serverStatus_cursor_timedOut)
+serverStatus_cursor_timedOut = re.findall(r"\d+",serverStatus_cursor_timedOut)[0]
 print("Server status cursor timedout: " + serverStatus_cursor_timedOut)
 
 serverStatus_operation_scanAndOrder = re.findall(r"\"scanAndOrder\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-serverStatus_operation_scanAndOrder = re.findall(r"\d+",serverStatus_operation_scanAndOrder)
+serverStatus_operation_scanAndOrder = re.findall(r"\d+",serverStatus_operation_scanAndOrder)[0]
 print("Server status operation scan and order: " + serverops)
 
 serverStatus_operation_writeConflicts = re.findall(r"\"writeConflicts\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-serverStatus_operation_writeConflicts = re.findall(r"\d+",serverStatus_operation_writeConflicts)
+serverStatus_operation_writeConflicts = re.findall(r"\d+",serverStatus_operation_writeConflicts)[0]
 print("Server status operation write conflicts: " + serverStatus_operation_writeConflicts)
 
 f.close
