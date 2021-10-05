@@ -183,7 +183,7 @@ print("Server status cursor timedout: " + serverStatus_cursor_timedOut)
 
 serverStatus_operation_scanAndOrder = re.findall(r"\"scanAndOrder\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 serverStatus_operation_scanAndOrder = re.findall(r"\d+",serverStatus_operation_scanAndOrder)[0]
-print("Server status operation scan and order: " + serverops)
+print("Server status operation scan and order: " + serverStatus_operation_scanAndOrder)
 
 serverStatus_operation_writeConflicts = re.findall(r"\"writeConflicts\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 serverStatus_operation_writeConflicts = re.findall(r"\d+",serverStatus_operation_writeConflicts)[0]
