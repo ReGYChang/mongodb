@@ -21,14 +21,14 @@ cpu_cores = re.findall(r"^CPU\(s\).+\d",cpu_info,re.M)[0].split(":")[1].strip()
 cpu_model = re.findall(r"^Model name:.+",cpu_info,re.M)[0].split(":")[1].strip()
 hypervisor = re.findall(r"^Hypervisor.+",cpu_info,re.M)[0].split(":")[1].strip()
 read_process("echo 'cpu_cores = {}' >> ./vars.js".format(cpu_cores))
-read_process("echo 'cpu_model = {}' >> ./vars.js".format(cpu_model))
-read_process("echo 'hypervisor = {}' >> ./vars.js".format(hypervisor))
+read_process("""echo "cpu_model = '{}'" >> ./vars.js""".format(cpu_model))
+read_process("""echo "hypervisor = '{}'" >> ./vars.js""".format(hypervisor))
 f.close()
 
 path = '{}/os-version.txt'.format(output_path)
 f = open(path,'r')
 os_version = f.read().strip()
-read_process("echo 'os_version = {}' >> ./vars.js".format(os_version))
+read_process("""echo "os_version = '{}'" >> ./vars.js""".format(os_version))
 f.close()
 
 
@@ -38,7 +38,7 @@ mem_info = f.read().strip()
 mem_space = re.findall(r"^Mem.+",mem_info,re.M)[0].split()[1]
 swap_space = re.findall(r"^Swap.+",mem_info,re.M)[0].split()[1]
 mem_swap = mem_space + '/' + swap_space
-read_process("echo 'mem_swap = {}' >> ./vars.js".format(mem_swap))
+read_process("""echo "mem_swap = '{}'" >> ./vars.js""".format(mem_swap))
 f.close()
 
 path = '{}/disk-info2.txt'.format(output_path)
@@ -46,14 +46,14 @@ f = open(path,'r')
 disk_info = f.read().strip()
 home_space_total = re.findall(r".+\/$",disk_info,re.M)[0].split()[1]
 home_space_used = re.findall(r".+\/$",disk_info,re.M)[0].split()[2]
-read_process("echo 'home_space_total = {}' >> ./vars.js".format(home_space_total))
-read_process("echo 'home_space_used = {}' >> ./vars.js".format(home_space_used))
+read_process("""echo "home_space_total = '{}'" >> ./vars.js""".format(home_space_total))
+read_process("""echo "home_space_used = '{}'" >> ./vars.js""".format(home_space_used))
 f.close()
 
 path = '{}/uptime.txt'.format(output_path)
 f = open(path,'r')
 uptime = f.read().strip('').split(",")[0]
-read_process("echo 'uptime = {}' >> ./vars.js".format(uptime))
+read_process("""echo "uptime = '{}'" >> ./vars.js""".format(uptime))
 f.close()
 
 path = '{}/ulimit.txt'.format(output_path)
@@ -85,9 +85,9 @@ path = '{}/thp_defrag.txt'.format(output_path)
 f = open(path,'r')
 thp_defrag = f.read().strip()
 if len(re.findall(r"\[never\]",thp_defrag)) > 0:
-    thp_defrag_flag = true
+    thp_defrag_flag = "true"
 else:
-    thp_defrag_flag = false
+    thp_defrag_flag = "false"
 read_process("echo 'thp_defrag_flag = {}' >> ./vars.js".format(thp_defrag_flag))
 f.close()
 
@@ -107,14 +107,14 @@ path = '{}/mongodb_version.txt'.format(output_path)
 f = open(path,'r')
 mongodb_version = f.read().strip()
 mongodb_version = re.findall(r"v[\d.]+",mongodb_version)[0]
-read_process("echo 'mongodb_version = {}' >> ./vars.js".format(mongodb_version))
+read_process("""echo "mongodb_version = '{}'" >> ./vars.js""".format(mongodb_version))
 f.close()
 
 path = '{}/{}/mongodb_fcv.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_fcv = f.read().strip()
 mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":")[1].strip().strip("\"")
-read_process("echo 'mongodb_fcv = {}' >> ./vars.js".format(mongodb_fcv))
+read_process("""echo "mongodb_fcv = '{}'" >> ./vars.js""".format(mongodb_fcv))
 f.close()
 
 path = '{}/mongodb_port.txt'.format(output_path)
@@ -127,7 +127,7 @@ path = '{}/uptime.txt'.format(output_path)
 f = open(path,'r')
 uptime = f.read().strip()
 uptime = uptime.split(",")[0]
-read_process("echo 'uptime = {}' >> ./vars.js".format(uptime))
+read_process("""echo "uptime = '{}'" >> ./vars.js""".format(uptime))
 f.close()
 
 path = '{}/{}/mongodb_serverStatus.txt'.format(output_path,mongod_name)
