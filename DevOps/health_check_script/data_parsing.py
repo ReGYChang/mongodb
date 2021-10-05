@@ -29,7 +29,8 @@ path = '{}/os-version.txt'.format(output_path)
 f = open(path,'r')
 os_version = f.read().strip()
 read_process("echo 'os_version = {}' > ./vars.js".format(os_version))
-f.close
+f.close()
+
 
 path = '{}/mem-info.txt'.format(output_path)
 f = open(path,'r')
@@ -38,7 +39,7 @@ mem_space = re.findall(r"^Mem.+",mem_info,re.M)[0].split()[1]
 swap_space = re.findall(r"^Swap.+",mem_info,re.M)[0].split()[1]
 mem_swap = mem_space + '/' + swap_space
 read_process("echo 'mem_swap = {}' > ./vars.js".format(mem_swap)
-f.close
+f.close()
 
 path = '{}/disk-info2.txt'.format(output_path)
 f = open(path,'r')
@@ -47,13 +48,13 @@ home_space_total = re.findall(r".+\/$",disk_info,re.M)[0].split()[1]
 home_space_used = re.findall(r".+\/$",disk_info,re.M)[0].split()[2]
 read_process("echo 'home_space_total = {}' > ./vars.js".format(home_space_total)
 read_process("echo 'home_space_used = {}' > ./vars.js".format(home_space_used)
-f.close
+f.close()
 
 path = '{}/uptime.txt'.format(output_path)
 f = open(path,'r')
 uptime = f.read().strip('').split(",")[0]
 read_process("echo 'uptime = {}' > ./vars.js".format(uptime)
-f.close
+f.close()
 
 path = '{}/ulimit.txt'.format(output_path)
 f = open(path,'r')
@@ -62,7 +63,7 @@ ulimit_nproc = re.findall(r"^Max processes.+",ulimit,re.M)[0].split()[3]
 ulimit_nofile = re.findall(r"^Max open files.+",ulimit,re.M)[0].split()[4]
 read_process("echo 'ulimit_nproc = {}' > ./vars.js".format(ulimit_nproc)
 read_process("echo 'ulimit_nofile = {}' > ./vars.js".format(ulimit_nofile)
-f.close
+f.close()
 
 # path = 'readahead.txt'
 # f = open(path,'r')
@@ -78,7 +79,7 @@ if len(re.findall(r"\[never\]",thp_enabled)) > 0:
 else:
     thp_enabled_flag = false
 read_process("echo 'thp_enabled_flag = {}' > ./vars.js".format(thp_enabled_flag)
-f.close
+f.close()
 
 path = '{}/thp_defrag.txt'.format(output_path)
 f = open(path,'r')
@@ -88,46 +89,46 @@ if len(re.findall(r"\[never\]",thp_defrag)) > 0:
 else:
     thp_defrag_flag = false
 read_process("echo 'thp_defrag_flag = {}' > ./vars.js".format(thp_defrag_flag)
-f.close
+f.close()
 
 path = '{}/vm_zone_reclaim_mode.txt'.format(output_path)
 f = open(path,'r')
 vm_zone_reclaim_mode = f.read().strip()
 read_process("echo 'vm_zone_reclaim_mode = {}' > ./vars.js".format(vm_zone_reclaim_mode)
-f.close
+f.close()
 
 path = '{}/vm_swappiness.txt'.format(output_path)
 f = open(path,'r')
 vm_swappiness = f.read().strip()
 read_process("echo 'vm_swappiness = {}' > ./vars.js".format(vm_swappiness)
-f.close
+f.close()
 
 path = '{}/mongodb_version.txt'.format(output_path)
 f = open(path,'r')
 mongodb_version = f.read().strip()
 mongodb_version = re.findall(r"v[\d.]+",mongodb_version)[0]
 read_process("echo 'mongodb_version = {}' > ./vars.js".format(mongodb_version)
-f.close
+f.close()
 
 path = '{}/{}/mongodb_fcv.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_fcv = f.read().strip()
 mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":")[1].strip().strip("\"")
 read_process("echo 'mongodb_fcv = {}' > ./vars.js".format(mongodb_fcv)
-f.close
+f.close()
 
 path = '{}/mongodb_port.txt'.format(output_path)
 f = open(path,'r')
 mongodb_port = f.read().strip()
 read_process("echo 'mongodb_port = {}' > ./vars.js".format(mongodb_port)
-f.close
+f.close()
 
 path = '{}/uptime.txt'.format(output_path)
 f = open(path,'r')
 uptime = f.read().strip()
 uptime = uptime.split(",")[0]
 read_process("echo 'uptime = {}' > ./vars.js".format(uptime)
-f.close
+f.close()
 
 path = '{}/{}/mongodb_serverStatus.txt'.format(output_path,mongod_name)
 f = open(path,'r')
@@ -189,7 +190,7 @@ serverStatus_operation_writeConflicts = re.findall(r"\"writeConflicts\".+",mongo
 serverStatus_operation_writeConflicts = re.findall(r"\d+",serverStatus_operation_writeConflicts)[0]
 read_process("echo 'serverStatus_operation_writeConflicts = {}' > ./vars.js".format(serverStatus_operation_writeConflicts)
 
-f.close
+f.close()
 
 
 
