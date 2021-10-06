@@ -39,7 +39,7 @@ else:
     tlsCertifacateKeyFilePassword = ""
 
 # parsing health check data
-read_process("""echo "company = '{}'" >> ./vars.js""".format(company))
+read_process("""echo "company = '{}'" > ./vars.js""".format(company))
 read_process("""echo "mongodb_set = '{}'" >> ./vars.js""".format(mongodb_set))
 read_process("""echo "hostname = '{}'" >> ./vars.js""".format(hostname))
 
@@ -238,15 +238,18 @@ output_server_status_dump = mongosh(port=mongodb_port,\
 path = '{}/{}/mongodb_dbstats.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_dbstats = f.read().strip()
+f.close()
+
 mongodb_dbstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_dbstats)
 mongodb_dbstats = re.sub(r"loading.+","",mongodb_dbstats,0)
-read_process("echo '{}' > {}/{}/mongodb_dbstats.txt".format(mongodb_dbstats,output_path,mongod_name))
+
+read_process("echo '{}' > {}/{}/mongodb_dbstats.json".format(mongodb_dbstats,output_path,mongod_name))
 mongoimport(port=mongodb_port,\
     username=username, \
     password=password, \
     db=company, \
     collection="db_stats", \
-    file="'{}/{}/mongodb_dbstats.txt'".format(output_path,mongod_name), \
+    file="'{}/{}/mongodb_dbstats.json'".format(output_path,mongod_name), \
     isTls=isTls, \
     tlsCAFile=tlsCAFile, \
     tlsCertificateKeyFile=tlsCertificateKeyFile, \
@@ -256,15 +259,21 @@ mongoimport(port=mongodb_port,\
 path = '{}/{}/mongodb_collstats.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_collstats = f.read().strip()
+f.close()
+
 mongodb_collstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_collstats)
-mongodb_collstats = re.sub(r"loading.+","",mongodb_collstats)
-read_process("echo '{}' > {}/{}/mongodb_collstats.txt".format(mongodb_collstats,output_path,mongod_name))
+mongodb_collstats = re.sub(r"loading.+","",mongodb_collstats,0)
+
+f = open("{}/{}/mongodb_collstats.json".format(output_path,mongod_name),"w+")
+f.write(mongodb_collstats)
+f.close()
+
 mongoimport(port=mongodb_port, \
     username=username, \
     password=password, \
     db=company, \
     collection="coll_stats", \
-    file="'{}/{}/mongodb_collstats.txt'".format(output_path,mongod_name), \
+    file="'{}/{}/mongodb_collstats.json'".format(output_path,mongod_name), \
     isTls=isTls, \
     tlsCAFile=tlsCAFile, \
     tlsCertificateKeyFile=tlsCertificateKeyFile, \
