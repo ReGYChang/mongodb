@@ -3,23 +3,46 @@ import re
 from utils import *
 from datetime import date
 
-# import mongodb configuration
-f = open('./mongod.conf','r')
-mongod_conf = f.read().strip()
-company = "test"
-mongodb_set = "rs0"
-f.close()
-
 today = date.today()
 hostname = read_process("hostname").strip()
 output_dir = "{}_health_check_{}".format(hostname,today)
 output_path = "./{}".format(output_dir)
 
+# import mongodb configuration
+config_data = open('config.json')
+config_json = json.load(config_data)
+mongo_host = config_json["host"]
+username = config_json["username"]
+password = config_json["password"]
+config_path = host["mongod_conf"]
+mongod_name = host["name"]
+mongodb_set = "rs0"
+company = "test"
+
+# read mongod.conf
+with open("{}".format(config_path),"r") as config_data:
+    try:
+        mongod_conf = config_data.read()
+    except Exception as e:
+        print(e)
+
+mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
+
+if re.findall(r"tls",mongod_conf,re.I) != None:
+    isTls = True
+    tlsCertificateKeyFile = re.findall(r"certificateKeyFile.+",mongod_conf)[0].split(":")[1].strip()
+    tlsCAFile = re.findall(r"CAFile.+",mongod_conf)[0].split(":")[1].strip()
+    tlsCertificateKeyFilePassword = re.findall(r"certificateKeyFilePassword.+",mongod_conf)[0].split(":")[1].strip()
+else:
+    isTls = False
+    tlsCertificateKeyFile = ""
+    tlsCAFile = ""
+    tlsCertifacateKeyFilePassword = ""
 
 # parsing health check data
-read_process("echo 'company = {}' >> ./vars.js".format(company))
-read_process("echo 'mongodb_set = {}' >> ./vars.js".format(mongodb_set))
-read_process("echo 'hostname = {}' >> ./vars.js".format(hostname))
+read_process("""echo "company = '{}'" >> ./vars.js""".format(company))
+read_process("""echo "mongodb_set = '{}'" >> ./vars.js""".format(mongodb_set))
+read_process("""echo "hostname = '{}'" >> ./vars.js""".format(hostname))
 
 path = '{}/cpu-info2.txt'.format(output_path)
 f = open(path,'r')
