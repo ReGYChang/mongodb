@@ -239,8 +239,8 @@ path = '{}/{}/mongodb_dbstats.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_dbstats = f.read().strip()
 mongodb_dbstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_dbstats)
-mongodb_dbstats = re.sub(r"^loading.+","",mongodb_dbstats)
-read_process("echo {} > {}/{}/mongodb_dbstats.txt".format(mongodb_dbstats,output_path,mongod_name))
+mongodb_dbstats = re.sub(r"loading.+","",mongodb_dbstats,0)
+read_process("echo '{}' > {}/{}/mongodb_dbstats.txt".format(mongodb_dbstats,output_path,mongod_name))
 mongoimport(port=mongodb_port,\
     username=username, \
     password=password, \
@@ -256,8 +256,9 @@ mongoimport(port=mongodb_port,\
 path = '{}/{}/mongodb_collstats.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_collstats = f.read().strip()
-mongodb_collstats = re.sub(r"^loading.+","",mongodb_collstats)
-read_process("echo {} > {}/{}/mongodb_collstats.txt".format(mongodb_collstats,output_path,mongod_name))
+mongodb_collstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_collstats)
+mongodb_collstats = re.sub(r"loading.+","",mongodb_collstats)
+read_process("echo '{}' > {}/{}/mongodb_collstats.txt".format(mongodb_collstats,output_path,mongod_name))
 mongoimport(port=mongodb_port, \
     username=username, \
     password=password, \

@@ -49,6 +49,7 @@ def mongosh(**args):
 
 def mongoimport(**args):
     sh_args = "mongoimport \
+        --legacy \
         --port {} \
         -u {} \
         -p {} \
