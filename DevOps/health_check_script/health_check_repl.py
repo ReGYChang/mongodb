@@ -291,10 +291,10 @@ for host in mongo_hosts:
         tlsCertificateKeyFile=tlsCertificateKeyFile,\
         tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
         isEval=False,\
-        js="get_collstats.js",\
+        js="get_colls_stats.js",\
         output_path=output_path,\
         mongod_name=mongod_name,\
-        task_name="mongodb_colls_stats")
+        task_name="mongodb_collstats")
 
     output_mongodb_indexes = mongosh(port=mongodb_port,\
         username=username,\
