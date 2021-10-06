@@ -11,11 +11,10 @@ output_path = "./{}".format(output_dir)
 # import mongodb configuration
 config_data = open('config.json')
 config_json = json.load(config_data)
-mongo_host = config_json["host"]
 username = config_json["username"]
 password = config_json["password"]
-config_path = host["mongod_conf"]
-mongod_name = host["name"]
+config_path = config_json["mongod_conf"]
+mongod_name = config_json["name"]
 mongodb_set = "rs0"
 company = "test"
 
@@ -236,7 +235,19 @@ output_server_status_dump = mongosh(port=mongodb_port,\
     js="server_status_dump.js")
     
 # import dbstats data into mongodb
+path = '{}/{}/mongodb_dbstats.txt'.format(output_path,mongod_name)
+f = open(path,'r')
+mongodb_dbstats = f.read().strip()
+mongodb_dbstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_dbstats)
+read_process("echo {} > {}/{}/mongodb_dbstats.txt".format(mongodb_dbstats,output_path,mongod_name))
+
 # import collstats data into mongodb
+path = '{}/{}/mongodb_collstats.txt'.format(output_path,mongod_name)
+f = open(path,'r')
+mongodb_collstats = f.read().strip()
+mongodb_collstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_collstats)
+read_process("echo {} > {}/{}/mongodb_collstats.txt".format(mongodb_collstats,output_path,mongod_name))
+
 # import index stats data into mongodb
 
 

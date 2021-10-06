@@ -291,7 +291,7 @@ for host in mongo_hosts:
         tlsCertificateKeyFile=tlsCertificateKeyFile,\
         tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
         isEval=False,\
-        js="get_colls_stats.js",\
+        js="get_collstats.js",\
         output_path=output_path,\
         mongod_name=mongod_name,\
         task_name="mongodb_colls_stats")
