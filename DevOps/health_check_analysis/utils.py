@@ -46,3 +46,20 @@ def mongosh(**args):
             --tlsCertificateKeyFilePassword {}".format(args['tlsCertificateKeyFile'],args['tlsCAFile'],args['tlsCertificateKeyFilePassword'])
     sh_args += " ./vars.js ./{}".format(args['js'])
     read_process(sh_args)
+
+def mongoimport(**args):
+    sh_args = "mongoimport \
+        --port {} \
+        -u {} \
+        -p {} \
+        --authenticationDatabase=admin \
+        --db={} \
+        --collection={} \
+        --file={}".format(args['port'],args['username'],args['password'],args['db'],args['collection'],args['file'])
+    if args['isTls']:
+        sh_args += " --ssl \
+            --tlsInsecure \
+            --sslPEMKeyFile {} \
+            --sslCAFile {} \
+            --sslPEMKeyPassword {}".format(args['tlsCertificateKeyFile'],args['tlsCAFile'],args['tlsCertificateKeyFilePassword'])
+    read_process(sh_args)
