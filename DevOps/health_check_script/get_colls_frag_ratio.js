@@ -30,7 +30,7 @@ function getCollectionDiskSpaceFragRatio(dbname, coll) {
 }
 
 var alldbs = db.getMongo().getDBNames();
-var fragInfos = []
+var fragInfos = [];
 
 for(var j = 0; j < alldbs.length; j++){
     var db = db.getSiblingDB(alldbs[j]);

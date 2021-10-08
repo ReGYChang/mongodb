@@ -278,9 +278,9 @@ f.close()
 
 mongodb_rs_frag = re.sub(r"loading.+","",mongodb_rs_frag,0)
 
-read_process("""echo "mongodb_rs_frag = {}" > ./vars.js""".format(mongodb_rs_frag))
+read_process("""echo "mongodb_rs_frag = {}" >> ./vars.js""".format(mongodb_rs_frag))
 
-output_linux_config_dump = mongosh(port=mongodb_port,\
+output_mongodb_rs_frag = mongosh(port=mongodb_port,\
     username=username,\
     password=password,\
     isTls=isTls,\
