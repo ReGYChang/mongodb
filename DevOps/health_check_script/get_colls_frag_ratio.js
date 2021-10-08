@@ -7,7 +7,7 @@ if(version < 2){
 }
 
 function getCollectionDiskSpaceFragRatio(dbname, coll) {
-    fragInfo = new Object();
+    var fragInfo = new Object();
     var res = db.getSiblingDB(dbname).runCommand({
         collStats: coll
     });
@@ -25,12 +25,16 @@ function getCollectionDiskSpaceFragRatio(dbname, coll) {
     fragInfo.totalStorageUnusedSize = totalStorageUnusedSize;
     fragInfo.totalStorageSize = totalStorageSize;
     fragInfo.fragRatio = ((totalStorageUnusedSize * 100.0) / totalStorageSize).toFixed(2) + "%";
-    print(JSON.stringify(fragInfo));
+    
+    return fragInfo;
 }
 
 var alldbs = db.getMongo().getDBNames();
+var fragInfos = []
 
 for(var j = 0; j < alldbs.length; j++){
     var db = db.getSiblingDB(alldbs[j]);
-    db.getCollectionNames().forEach((c) => {getCollectionDiskSpaceFragRatio(db.getName(), c);});
+    db.getCollectionNames().forEach((c) => {fragInfos.push(getCollectionDiskSpaceFragRatio(db.getName(), c));});
 }
+
+print(JSON.stringify(fragInfos));
