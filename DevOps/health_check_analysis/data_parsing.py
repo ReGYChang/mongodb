@@ -280,6 +280,14 @@ mongodb_rs_frag = re.sub(r"loading.+","",mongodb_rs_frag,0)
 
 read_process("""echo "mongodb_rs_frag = {}" > ./vars.js""".format(mongodb_rs_frag))
 
+output_linux_config_dump = mongosh(port=mongodb_port,\
+    username=username,\
+    password=password,\
+    isTls=isTls,\
+    tlsCAFile=tlsCAFile,\
+    tlsCertificateKeyFile=tlsCertificateKeyFile,\
+    tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
+    js="addFields.js")
 
 # import index stats data into mongodb
 
