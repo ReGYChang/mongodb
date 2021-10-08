@@ -165,9 +165,6 @@ read_process("echo 'serverStatus_asserts_warning = {}' >> ./vars.js".format(serv
 serverStatus_asserts_user = re.findall(r"\"user\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 read_process("echo 'serverStatus_asserts_user = {}' >> ./vars.js".format(serverStatus_asserts_user))
 
-# serverStatus_connections = re.findall(r"\"connections\".+(\n.+){4}",mongodb_serverStatus)[0].split(":")[1]
-# print("Server status connections: " + serverStatus_connections)
-
 serverStatus_connections_current = re.findall(r"\"connections\"(.+\n){2}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 read_process("echo 'serverStatus_connection_current = {}' >> ./vars.js".format(serverStatus_connections_current))
 
@@ -177,12 +174,6 @@ read_process("echo 'serverStatus_connections_available = {}' >> ./vars.js".forma
 serverStatus_extra_info_page_faults = re.findall(r"\"page_faults\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 serverStatus_extra_info_page_faults = re.findall(r"\d+",serverStatus_extra_info_page_faults)[0]
 read_process("echo 'serverStatus_extra_info_page_faults = {}' >> ./vars.js".format(serverStatus_extra_info_page_faults))
-
-# serverStatus_opLatencies_reads = re.findall(r"\"reads\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip()
-# print("Server status oplatencies reads: " + serverStatus_opLatencies_reads)
-
-# serverStatus_opLatencies_writes = re.findall(r"\"writes\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip()
-# print("Server status oplatencies writes: " + serverStatus_opLatencies_writes)
 
 serverStatus_opLatencies_reads_latency = re.findall(r"\"reads\".+(\n.+){1}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 serverStatus_opLatencies_reads_latency = re.findall(r"\d+",serverStatus_opLatencies_reads_latency)[0]

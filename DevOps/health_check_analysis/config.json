@@ -2,5 +2,7 @@
     "name": "rs0_0",
     "username": "admin",
     "password": "admin",
-    "mongod_conf": "/etc/mongod.conf"
+    "mongod_conf": "/etc/mongod.conf",
+    "health_check_start": 1600000000,
+    "health_check_end": 1700000000
 }
