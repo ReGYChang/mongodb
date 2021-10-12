@@ -205,6 +205,13 @@ read_process("echo 'serverStatus_operation_writeConflicts = {}' >> ./vars.js".fo
 
 f.close()
 
+path = '{}/{}/mongodb_rs_conf.txt'.format(output_path,mongod_name)
+f = open(path,'r')
+mongodb_rs_conf = f.read().strip()
+mongodb_rs_conf = re.sub(r"\"","\"",mongodb_rs_conf,0)
+read_process("echo 'mongodb_rs_conf = {}' >> ./vars.js".format(mongodb_rs_conf))
+f.close()
+
 # dump linux config data into mongodb
 output_linux_config_dump = mongosh(port=mongodb_port,\
     username=username,\

@@ -2,7 +2,9 @@ var db = db.getSiblingDB(company);
 var ts = (new Date()).getTime();
 
 var document = {
-    "set" : mongodb_set,
+    "rsSet" : mongodb_set,
+    "rsConf" : mongodb_rs_conf,
+    "fcv" : mongodb_fcv,
     "serverStatusUptime" : serverStatus_uptime,
     "serverStatusAssertsWarning" : serverStatus_asserts_warning,
     "serverStatusAssertsUser" : serverStatus_asserts_user,
