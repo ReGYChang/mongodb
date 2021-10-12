@@ -16,7 +16,6 @@ def read_process(cmd, args=''):
         if cmd_not_found:
             raise IOError('%s must be on your system path.' % cmd)
         output = firstline + pipeout.read()
-        # pb_flush(task)
     finally:
         pipeout.close()
     return output
@@ -29,7 +28,6 @@ def bashsh(**args):
         sh_args += " >> {}/{}.txt".format(args['output_path'],args['task_name'])
     else:
         sh_args += " > {}/{}.txt".format(args['output_path'],args['task_name'])
-    pb_flush(args['task_name'])
     read_process(sh_args)
 
 def mongosh(**args):

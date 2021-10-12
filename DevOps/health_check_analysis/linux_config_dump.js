@@ -1,4 +1,4 @@
-var db = db.getSiblingDB("test");
+var db = db.getSiblingDB(company);
 var ts = (new Date()).getTime();
 
 var document = {
@@ -20,8 +20,3 @@ var document = {
 }
 
 db.linux_config.insert(document);
-
-db.coll_stats.aggregate([
-  { $match: { operationTime:Timestamp(1633492757,1) }},
-  { $addFields: { host: "host1"}}
-])
