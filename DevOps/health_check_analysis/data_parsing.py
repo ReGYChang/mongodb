@@ -277,6 +277,7 @@ mongodb_rs_frag = f.read().strip()
 f.close()
 
 mongodb_rs_frag = re.sub(r"loading.+","",mongodb_rs_frag,0)
+mongodb_rs_frag = re.sub(r"\"","\"",mongodb_rs_frag,0)
 
 read_process("""echo "mongodb_rs_frag = {}" >> ./vars.js""".format(mongodb_rs_frag))
 
