@@ -120,6 +120,13 @@ else:
 read_process("echo 'thp_defrag_flag = {}' >> ./vars.js".format(thp_defrag_flag))
 f.close()
 
+path = '{}/thp_defrag.txt'.format(output_path)
+f = open(path,'r')
+selinux = f.read().strip()
+isSelinux = False if re.findall(r"SELINUX=.+",selinux).split("=")[1] == "disabled" else True
+read_process("echo 'isSelinux = {}' >> ./vars.js".format(isSelinux))
+f.close()
+
 path = '{}/vm_zone_reclaim_mode.txt'.format(output_path)
 f = open(path,'r')
 vm_zone_reclaim_mode = f.read().strip()

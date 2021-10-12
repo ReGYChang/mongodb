@@ -12,6 +12,7 @@ var document = {
   "uptime" : uptime,
   "ulimitNproc" : ulimit_nproc,
   "ulimitNofile" : ulimit_nofile,
+  "selinux" : isSelinux,
   "thpEnabledFlag" : thp_enabled_flag,
   "thpDefragFlag" : thp_defrag_flag,
   "vmZoneReclaimMode" : vm_zone_reclaim_mode,
