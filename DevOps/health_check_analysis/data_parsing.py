@@ -47,126 +47,171 @@ read_process("""echo "hostname = '{}'" >> ./vars.js""".format(hostname))
 read_process("""echo "health_check_start = {}" >> ./vars.js""".format(health_check_start))
 read_process("""echo "health_check_end = {}" >> ./vars.js""".format(health_check_end))
 
-path = '{}/cpu-info2.txt'.format(output_path)
-f = open(path,'r')
-cpu_info = f.read()
+# path = '{}/cpu-info2.txt'.format(output_path)
+# f = open(path,'r')
+# cpu_info = f.read()
+# cpu_cores = re.findall(r"^CPU\(s\).+\d",cpu_info,re.M)[0].split(":")[1].strip()
+# cpu_model = re.findall(r"^Model name:.+",cpu_info,re.M)[0].split(":")[1].strip()
+# hypervisor = re.findall(r"^Hypervisor.+",cpu_info,re.M)[0].split(":")[1].strip()
+# read_process("echo 'cpu_cores = {}' >> ./vars.js".format(cpu_cores))
+# read_process("""echo "cpu_model = '{}'" >> ./vars.js""".format(cpu_model))
+# read_process("""echo "hypervisor = '{}'" >> ./vars.js""".format(hypervisor))
+# f.close()
+
+cpu_info = read_file('{}/cpu-info2.txt'.format(output_path))
 cpu_cores = re.findall(r"^CPU\(s\).+\d",cpu_info,re.M)[0].split(":")[1].strip()
 cpu_model = re.findall(r"^Model name:.+",cpu_info,re.M)[0].split(":")[1].strip()
 hypervisor = re.findall(r"^Hypervisor.+",cpu_info,re.M)[0].split(":")[1].strip()
 read_process("echo 'cpu_cores = {}' >> ./vars.js".format(cpu_cores))
 read_process("""echo "cpu_model = '{}'" >> ./vars.js""".format(cpu_model))
 read_process("""echo "hypervisor = '{}'" >> ./vars.js""".format(hypervisor))
-f.close()
 
-path = '{}/os-version.txt'.format(output_path)
-f = open(path,'r')
-os_version = f.read().strip()
+# path = '{}/os-version.txt'.format(output_path)
+# f = open(path,'r')
+# os_version = f.read().strip()
+# read_process("""echo "os_version = '{}'" >> ./vars.js""".format(os_version))
+# f.close()
+
+os_version = read_file('{}/os-version.txt'.format(output_path))
 read_process("""echo "os_version = '{}'" >> ./vars.js""".format(os_version))
-f.close()
 
+# path = '{}/mem-info.txt'.format(output_path)
+# f = open(path,'r')
+# mem_info = f.read().strip()
+# mem_space = re.findall(r"^Mem.+",mem_info,re.M)[0].split()[1]
+# swap_space = re.findall(r"^Swap.+",mem_info,re.M)[0].split()[1]
+# mem_swap = mem_space + '/' + swap_space
+# read_process("""echo "mem_swap = '{}'" >> ./vars.js""".format(mem_swap))
+# f.close()
 
-path = '{}/mem-info.txt'.format(output_path)
-f = open(path,'r')
-mem_info = f.read().strip()
+mem_info = read_file('{}/mem-info.txt'.format(output_path))
 mem_space = re.findall(r"^Mem.+",mem_info,re.M)[0].split()[1]
 swap_space = re.findall(r"^Swap.+",mem_info,re.M)[0].split()[1]
 mem_swap = mem_space + '/' + swap_space
 read_process("""echo "mem_swap = '{}'" >> ./vars.js""".format(mem_swap))
-f.close()
 
-path = '{}/disk-info2.txt'.format(output_path)
-f = open(path,'r')
-disk_info = f.read().strip()
+# path = '{}/disk-info2.txt'.format(output_path)
+# f = open(path,'r')
+# disk_info = f.read().strip()
+# home_space_total = re.findall(r".+\/$",disk_info,re.M)[0].split()[1]
+# home_space_used = re.findall(r".+\/$",disk_info,re.M)[0].split()[2]
+# read_process("""echo "home_space_total = '{}'" >> ./vars.js""".format(home_space_total))
+# read_process("""echo "home_space_used = '{}'" >> ./vars.js""".format(home_space_used))
+# f.close()
+
+disk_info = read_file('{}/disk-info2.txt'.format(output_path))
 home_space_total = re.findall(r".+\/$",disk_info,re.M)[0].split()[1]
 home_space_used = re.findall(r".+\/$",disk_info,re.M)[0].split()[2]
 read_process("""echo "home_space_total = '{}'" >> ./vars.js""".format(home_space_total))
 read_process("""echo "home_space_used = '{}'" >> ./vars.js""".format(home_space_used))
-f.close()
 
-path = '{}/uptime.txt'.format(output_path)
-f = open(path,'r')
+# path = '{}/uptime.txt'.format(output_path)
+# f = open(path,'r')
+# uptime = f.read().split(",")[0].strip()
+# read_process("""echo "uptime = '{}'" >> ./vars.js""".format(uptime))
+# f.close()
+
+uptime = read_file('{}/uptime.txt'.format(output_path))
 uptime = f.read().split(",")[0].strip()
 read_process("""echo "uptime = '{}'" >> ./vars.js""".format(uptime))
-f.close()
 
-path = '{}/ulimit.txt'.format(output_path)
-f = open(path,'r')
-ulimit = f.read().strip()
+# path = '{}/ulimit.txt'.format(output_path)
+# f = open(path,'r')
+# ulimit = f.read().strip()
+# ulimit_nproc = re.findall(r"^Max processes.+",ulimit,re.M)[0].split()[3]
+# ulimit_nofile = re.findall(r"^Max open files.+",ulimit,re.M)[0].split()[4]
+# read_process("echo 'ulimit_nproc = {}' >> ./vars.js".format(ulimit_nproc))
+# read_process("echo 'ulimit_nofile = {}' >> ./vars.js".format(ulimit_nofile))
+# f.close()
+
+ulimit = read_file('{}/ulimit.txt'.format(output_path))
 ulimit_nproc = re.findall(r"^Max processes.+",ulimit,re.M)[0].split()[3]
 ulimit_nofile = re.findall(r"^Max open files.+",ulimit,re.M)[0].split()[4]
 read_process("echo 'ulimit_nproc = {}' >> ./vars.js".format(ulimit_nproc))
 read_process("echo 'ulimit_nofile = {}' >> ./vars.js".format(ulimit_nofile))
-f.close()
 
-path = '{}/readahead.txt'.format(output_path)
-f = open(path,'r')
-readahead = f.read().strip()
+# path = '{}/readahead.txt'.format(output_path)
+# f = open(path,'r')
+# readahead = f.read().strip()
+# readahead = re.findall(r"^rw.+",readahead,re.M)[0].split()[1]
+# read_process("echo 'readahead = {}' >> ./vars.js".format(readahead))
+# f.close
+
+readahead = read_file('{}/readahead.txt'.format(output_path))
 readahead = re.findall(r"^rw.+",readahead,re.M)[0].split()[1]
 read_process("echo 'readahead = {}' >> ./vars.js".format(readahead))
-f.close
 
-path = '{}/thp_enabled.txt'.format(output_path)
-f = open(path,'r')
-thp_enabled = f.read().strip()
+# path = '{}/thp_enabled.txt'.format(output_path)
+# f = open(path,'r')
+# thp_enabled = f.read().strip()
+thp_enabled = read_file('{}/thp_enabled.txt'.format(output_path))
 if len(re.findall(r"\[never\]",thp_enabled)) > 0:
     thp_enabled_flag = "true"
 else:
     thp_enabled_flag = "false"
 read_process("echo 'thp_enabled_flag = {}' >> ./vars.js".format(thp_enabled_flag))
-f.close()
+# f.close()
 
 path = '{}/thp_defrag.txt'.format(output_path)
-f = open(path,'r')
-thp_defrag = f.read().strip()
+# f = open(path,'r')
+# thp_defrag = f.read().strip()
+thp_defrag = read_file('{}/thp_defrag.txt'.format(output_path))
 if len(re.findall(r"\[never\]",thp_defrag)) > 0:
     thp_defrag_flag = "true"
 else:
     thp_defrag_flag = "false"
 read_process("echo 'thp_defrag_flag = {}' >> ./vars.js".format(thp_defrag_flag))
-f.close()
+# f.close()
 
-path = '{}/selinux.txt'.format(output_path)
-f = open(path,'r')
-selinux = f.read().strip()
+# path = '{}/selinux.txt'.format(output_path)
+# f = open(path,'r')
+# selinux = f.read().strip()
+selinux = read_file('{}/selinux.txt'.format(output_path))
 isSelinux = "false" if re.findall(r"^SELINUX.+",selinux,re.M)[0].split("=")[1] == "disabled" else "true"
 read_process("echo 'isSelinux = {}' >> ./vars.js".format(isSelinux))
-f.close()
+# f.close()
 
-path = '{}/vm_zone_reclaim_mode.txt'.format(output_path)
-f = open(path,'r')
-vm_zone_reclaim_mode = f.read().strip()
+# path = '{}/vm_zone_reclaim_mode.txt'.format(output_path)
+# f = open(path,'r')
+# vm_zone_reclaim_mode = f.read().strip()
+vm_zone_reclaim_mode = read_file('{}/vm_zone_reclaim_mode.txt'.format(output_path))
 read_process("echo 'vm_zone_reclaim_mode = {}' >> ./vars.js".format(vm_zone_reclaim_mode))
-f.close()
+# f.close()
 
-path = '{}/vm_swappiness.txt'.format(output_path)
-f = open(path,'r')
-vm_swappiness = f.read().strip()
+# path = '{}/vm_swappiness.txt'.format(output_path)
+# f = open(path,'r')
+# vm_swappiness = f.read().strip()
+vm_swappiness = read_file('{}/vm_swappiness.txt'.format(output_path))
 read_process("echo 'vm_swappiness = {}' >> ./vars.js".format(vm_swappiness))
-f.close()
+# f.close()
 
-path = '{}/mongodb_version.txt'.format(output_path)
-f = open(path,'r')
-mongodb_version = f.read().strip()
+# path = '{}/mongodb_version.txt'.format(output_path)
+# f = open(path,'r')
+# mongodb_version = f.read().strip()
+mongodb_version = read_file('{}/mongodb_version.txt'.format(output_path))
 mongodb_version = re.findall(r"v[\d.]+",mongodb_version)[0]
 read_process("""echo "mongodb_version = '{}'" >> ./vars.js""".format(mongodb_version))
-f.close()
+# f.close()
 
-path = '{}/{}/mongodb_fcv.txt'.format(output_path,mongod_name)
-f = open(path,'r')
-mongodb_fcv = f.read().strip()
+# path = '{}/{}/mongodb_fcv.txt'.format(output_path,mongod_name)
+# f = open(path,'r')
+# mongodb_fcv = f.read().strip()
+mongodb_fcv = read_file('{}/{}/mongodb_fcv.txt'.format(output_path,mongod_name))
 mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":")[1].strip().strip("\"")
 read_process("""echo "mongodb_fcv = '{}'" >> ./vars.js""".format(mongodb_fcv))
-f.close()
+# f.close()
 
-path = '{}/mongodb_port.txt'.format(output_path)
-f = open(path,'r')
-mongodb_port = f.read().strip()
+# path = '{}/mongodb_port.txt'.format(output_path)
+# f = open(path,'r')
+# mongodb_port = f.read().strip()
+mongodb_port = read_file('{}/mongodb_port.txt'.format(output_path))
 read_process("echo 'mongodb_port = {}' >> ./vars.js".format(mongodb_port))
-f.close()
+# f.close()
 
-path = '{}/{}/mongodb_serverStatus.txt'.format(output_path,mongod_name)
-f = open(path,'r')
-mongodb_serverStatus = f.read().strip()
+# path = '{}/{}/mongodb_serverStatus.txt'.format(output_path,mongod_name)
+# f = open(path,'r')
+# mongodb_serverStatus = f.read().strip()
+mongodb_serverStatus = read_file('{}/{}/mongodb_serverStatus.txt'.format(output_path,mongod_name))
 
 serverStatus_uptime = re.findall(r"\"uptime\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
 read_process("echo 'serverStatus_uptime = {}' >> ./vars.js".format(serverStatus_uptime))
@@ -215,14 +260,15 @@ serverStatus_operation_writeConflicts = re.findall(r"\"writeConflicts\".+",mongo
 serverStatus_operation_writeConflicts = re.findall(r"\d+",serverStatus_operation_writeConflicts)[0]
 read_process("echo 'serverStatus_operation_writeConflicts = {}' >> ./vars.js".format(serverStatus_operation_writeConflicts))
 
-f.close()
+# f.close()
 
-path = '{}/{}/mongodb_rs_conf.txt'.format(output_path,mongod_name)
-f = open(path,'r')
-mongodb_rs_conf = f.read().strip()
+# path = '{}/{}/mongodb_rs_conf.txt'.format(output_path,mongod_name)
+# f = open(path,'r')
+# mongodb_rs_conf = f.read().strip()
+mongodb_rs_conf = read_file('{}/{}/mongodb_rs_conf.txt'.format(output_path,mongod_name))
 mongodb_rs_conf = re.sub(r"\"","\"",mongodb_rs_conf,0)
 read_process("echo 'mongodb_rs_conf = {};' >> ./vars.js".format(mongodb_rs_conf))
-f.close()
+# f.close()
 
 # dump linux config data into mongodb
 output_linux_config_dump = mongosh(port=mongodb_port,\
@@ -245,10 +291,12 @@ output_server_status_dump = mongosh(port=mongodb_port,\
     js="server_status_dump.js")
     
 # import dbstats data into mongodb
-path = '{}/{}/mongodb_dbstats.txt'.format(output_path,mongod_name)
-f = open(path,'r')
-mongodb_dbstats = f.read().strip()
-f.close()
+# path = '{}/{}/mongodb_dbstats.txt'.format(output_path,mongod_name)
+# f = open(path,'r')
+# mongodb_dbstats = f.read().strip()
+# f.close()
+
+mongodb_dbstats = read_file('{}/{}/mongodb_dbstats.txt'.format(output_path,mongod_name))
 
 mongodb_dbstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_dbstats)
 mongodb_dbstats = re.sub(r"loading.+","",mongodb_dbstats,0)
@@ -266,10 +314,12 @@ mongoimport(port=mongodb_port,\
     tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword)
 
 # import collstats data into mongodb
-path = '{}/{}/mongodb_collstats.txt'.format(output_path,mongod_name)
-f = open(path,'r')
-mongodb_collstats = f.read().strip()
-f.close()
+# path = '{}/{}/mongodb_collstats.txt'.format(output_path,mongod_name)
+# f = open(path,'r')
+# mongodb_collstats = f.read().strip()
+# f.close()
+
+mongodb_collstats = read_file('{}/{}/mongodb_collstats.txt'.format(output_path,mongod_name))
 
 mongodb_collstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_collstats)
 mongodb_collstats = re.sub(r"loading.+","",mongodb_collstats,0)
@@ -290,10 +340,12 @@ mongoimport(port=mongodb_port, \
     tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword)
 
 # import fragmentation info
-path = '{}/{}/mongodb_rs_frag.txt'.format(output_path,mongod_name)
-f = open(path,'r')
-mongodb_rs_frag = f.read().strip()
-f.close()
+# path = '{}/{}/mongodb_rs_frag.txt'.format(output_path,mongod_name)
+# f = open(path,'r')
+# mongodb_rs_frag = f.read().strip()
+# f.close()
+
+mongodb_rs_frag = read_file('{}/{}/mongodb_rs_frag.txt'.format(output_path,mongod_name))
 
 mongodb_rs_frag = re.sub(r"loading.+","",mongodb_rs_frag,0)
 mongodb_rs_frag = re.sub(r"\"","\\\"",mongodb_rs_frag,0)
@@ -308,8 +360,3 @@ output_mongodb_rs_frag = mongosh(port=mongodb_port,\
     tlsCertificateKeyFile=tlsCertificateKeyFile,\
     tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
     js="addFields.js")
-
-# import index stats data into mongodb
-
-
-

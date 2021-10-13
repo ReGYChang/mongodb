@@ -20,6 +20,12 @@ def read_process(cmd, args=''):
         pipeout.close()
     return output
 
+def read_file(path):
+    f = open(path,'r')
+    return f.read().strip()
+
+
+
 def bashsh(**args):
     sh_args = args['cmd']
     for arg in args['args']:
