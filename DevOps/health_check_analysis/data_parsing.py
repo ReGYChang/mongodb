@@ -17,9 +17,8 @@ config_path = config_json["mongod_conf"]
 mongod_name = config_json["name"]
 health_check_start = config_json["health_check_start"]
 health_check_end = config_json["health_check_end"]
-
-mongodb_set = "rs0"
-company = "test"
+mongodb_set = config_json["mongodb_set"]
+company = config_json["company"]
 
 # read mongod.conf
 with open("{}".format(config_path),"r") as config_data:
@@ -98,7 +97,7 @@ read_process("echo 'ulimit_nproc = {}' >> ./vars.js".format(ulimit_nproc))
 read_process("echo 'ulimit_nofile = {}' >> ./vars.js".format(ulimit_nofile))
 f.close()
 
-path = 'readahead.txt'
+path = '{}/readahead.txt'.format(output_path)
 f = open(path,'r')
 readahead = f.read().strip()
 readahead = re.findall(r"^rw.+",readahead,re.M)[0].split()[1]
