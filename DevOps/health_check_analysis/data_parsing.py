@@ -14,7 +14,7 @@ config_json = json.load(config_data)
 username = config_json["username"]
 password = config_json["password"]
 config_path = config_json["mongod_conf"]
-mongod_name = config_json["name"]
+mongod_name = config_json["mongod_name"]
 health_check_start = config_json["health_check_start"]
 health_check_end = config_json["health_check_end"]
 mongodb_set = config_json["mongodb_set"]
@@ -43,6 +43,7 @@ else:
 # parsing health check data
 read_process("""echo "company = '{}'" > ./vars.js""".format(company))
 read_process("""echo "mongodb_set = '{}'" >> ./vars.js""".format(mongodb_set))
+read_process("""echo "hostname = '{}'" >> ./vars.js""".format(hostname))
 read_process("""echo "health_check_start = {}" >> ./vars.js""".format(health_check_start))
 read_process("""echo "health_check_end = {}" >> ./vars.js""".format(health_check_end))
 
@@ -220,7 +221,7 @@ path = '{}/{}/mongodb_rs_conf.txt'.format(output_path,mongod_name)
 f = open(path,'r')
 mongodb_rs_conf = f.read().strip()
 mongodb_rs_conf = re.sub(r"\"","\"",mongodb_rs_conf,0)
-read_process("echo 'mongodb_rs_conf = {}' >> ./vars.js".format(mongodb_rs_conf))
+read_process("echo 'mongodb_rs_conf = {};' >> ./vars.js".format(mongodb_rs_conf))
 f.close()
 
 # dump linux config data into mongodb
@@ -295,7 +296,7 @@ mongodb_rs_frag = f.read().strip()
 f.close()
 
 mongodb_rs_frag = re.sub(r"loading.+","",mongodb_rs_frag,0)
-mongodb_rs_frag = re.sub(r"\"","\"",mongodb_rs_frag,0)
+mongodb_rs_frag = re.sub(r"\"","\\\"",mongodb_rs_frag,0)
 
 read_process("""echo "mongodb_rs_frag = {}" >> ./vars.js""".format(mongodb_rs_frag))
 
