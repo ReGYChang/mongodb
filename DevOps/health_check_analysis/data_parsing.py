@@ -15,6 +15,9 @@ username = config_json["username"]
 password = config_json["password"]
 config_path = config_json["mongod_conf"]
 mongod_name = config_json["name"]
+health_check_start = config_json["health_check_start"]
+health_check_end = config_json["health_check_end"]
+
 mongodb_set = "rs0"
 company = "test"
 
@@ -41,7 +44,8 @@ else:
 # parsing health check data
 read_process("""echo "company = '{}'" > ./vars.js""".format(company))
 read_process("""echo "mongodb_set = '{}'" >> ./vars.js""".format(mongodb_set))
-read_process("""echo "hostname = '{}'" >> ./vars.js""".format(hostname))
+read_process("""echo "health_check_start = {}" >> ./vars.js""".format(health_check_start))
+read_process("""echo "health_check_end = {}" >> ./vars.js""".format(health_check_end))
 
 path = '{}/cpu-info2.txt'.format(output_path)
 f = open(path,'r')
@@ -94,11 +98,12 @@ read_process("echo 'ulimit_nproc = {}' >> ./vars.js".format(ulimit_nproc))
 read_process("echo 'ulimit_nofile = {}' >> ./vars.js".format(ulimit_nofile))
 f.close()
 
-# path = 'readahead.txt'
-# f = open(path,'r')
-# ulimit = f.read().strip()
-# readahead = re.findall(r"^Max processes.+",ulimit,re.M)[0].split()[2]
-# f.close
+path = 'readahead.txt'
+f = open(path,'r')
+readahead = f.read().strip()
+readahead = re.findall(r"^rw.+",readahead,re.M)[0].split()[1]
+read_process("echo 'readahead = {}' >> ./vars.js".format(readahead))
+f.close
 
 path = '{}/thp_enabled.txt'.format(output_path)
 f = open(path,'r')
@@ -120,10 +125,10 @@ else:
 read_process("echo 'thp_defrag_flag = {}' >> ./vars.js".format(thp_defrag_flag))
 f.close()
 
-path = '{}/thp_defrag.txt'.format(output_path)
+path = '{}/selinux.txt'.format(output_path)
 f = open(path,'r')
 selinux = f.read().strip()
-isSelinux = False if re.findall(r"SELINUX=.+",selinux).split("=")[1] == "disabled" else True
+isSelinux = "false" if re.findall(r"^SELINUX.+",selinux,re.M)[0].split("=")[1] == "disabled" else "true"
 read_process("echo 'isSelinux = {}' >> ./vars.js".format(isSelinux))
 f.close()
 
