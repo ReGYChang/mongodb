@@ -1,7 +1,5 @@
 import os
 import re
-import time
-import sys
 
 def read_process(cmd, args=''):
     fullcmd = '%s %s' % (cmd, args)
@@ -23,8 +21,6 @@ def read_process(cmd, args=''):
 def read_file(path):
     f = open(path,'r')
     return f.read().strip()
-
-
 
 def bashsh(**args):
     sh_args = args['cmd']
