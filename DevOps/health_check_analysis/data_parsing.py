@@ -1,12 +1,6 @@
 import json
 import re
 from utils import *
-from datetime import date
-
-today = date.today()
-hostname = read_process("hostname").strip()
-output_dir = "{}_health_check_{}".format(hostname,today)
-output_path = "./{}".format(output_dir)
 
 # import mongodb configuration
 config_data = open('config.json')
@@ -19,6 +13,10 @@ health_check_start = config_json["health_check_start"]
 health_check_end = config_json["health_check_end"]
 mongodb_set = config_json["mongodb_set"]
 company = config_json["company"]
+hostname = config_json["hostname"]
+health_check_date = config_json["date"]
+output_path = "./{}_health_check_{}".format(hostname,health_check_date)
+
 
 # read mongod.conf
 with open("{}".format(config_path),"r") as config_data:

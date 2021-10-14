@@ -6,5 +6,7 @@
     "mongodb_set": "rs0",
     "health_check_start": 1600000000,
     "health_check_end": 1700000000,
-    "company": "fubon"
+    "company": "fubon",
+    "hostname": "mongodb-ansible-8",
+    "date": "2021-10-14"
 }
