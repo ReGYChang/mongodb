@@ -160,7 +160,7 @@ for host in mongo_hosts:
     mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
     mongod_version = re.findall(r"(v[\d.]+)",read_process("mongod --version"))[0].split('.')[1].strip()
 
-    if re.findall(r"tls",mongod_conf,re.I) != None:
+    if re.findall(r"tls",mongod_conf) != None:
         isTls = True
         tlsCertificateKeyFile = re.findall(r"certificateKeyFile.+",mongod_conf)[0].split(":")[1].strip()
         tlsCAFile = re.findall(r"CAFile.+",mongod_conf)[0].split(":")[1].strip()
@@ -169,7 +169,7 @@ for host in mongo_hosts:
         isTls = False
         tlsCertificateKeyFile = ""
         tlsCAFile = ""
-        tlsCertifacateKeyFilePassword = ""
+        tlsCertificateKeyFilePassword = ""
 
     read_process("echo 'version = {}' > ./vars.js".format(mongod_version))
 
