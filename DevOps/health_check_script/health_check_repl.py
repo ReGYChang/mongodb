@@ -6,9 +6,9 @@ from subprocess import check_output
 from utils import *
 
 # import script config
-today = date.today()
+health_check_date = date.today()
 hostname = read_process("hostname").strip()
-output_dir = "{}_health_check_{}".format(hostname,today)
+output_dir = "{}_health_check_{}".format(hostname,health_check_date)
 output_path = "./{}".format(output_dir)
 mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 
