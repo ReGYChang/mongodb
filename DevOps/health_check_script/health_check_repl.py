@@ -158,9 +158,9 @@ for host in mongo_hosts:
 
     log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
     mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
-    mongod_version = re.findall(r"(v[\d.]+)",read_process("mongod --version"))[0].split('.')[1].strip()
+    mongod_version = re.findall(r"(v[\d.]+)",read_process("/usr/bin/mongod --version"))[0].split('.')[1].strip()
 
-    if re.findall(r"tls",mongod_conf) != None:
+    if re.findall(r"tls:",mongod_conf) != None:
         isTls = True
         tlsCertificateKeyFile = re.findall(r"certificateKeyFile.+",mongod_conf)[0].split(":")[1].strip()
         tlsCAFile = re.findall(r"CAFile.+",mongod_conf)[0].split(":")[1].strip()
