@@ -143,7 +143,7 @@ mongo_hosts = config_json["hosts"]
 
 for host in mongo_hosts:
     config_path = host["mongod_conf"]
-    mongod_name = host["name"]
+    mongod_name = host["mongod_name"]
     username = host["username"]
     password = host["password"]
 

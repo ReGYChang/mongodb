@@ -56,43 +56,43 @@ for host in hosts:
 
     ##### FIX hypervisor or physical
     hypervisor = re.findall(r"^Hypervisor.+",cpu_info,re.M)[0].split(":")[1].strip()
-    read_process("echo 'cpu_cores = {}' >> ./vars.js".format(cpu_cores))
-    read_process("""echo "cpu_model = '{}'" >> ./vars.js""".format(cpu_model))
-    read_process("""echo "hypervisor = '{}'" >> ./vars.js""".format(hypervisor))
+    read_process("echo 'cpu_cores = {}' >> ./vars.{}.js".format(cpu_cores,hostname))
+    read_process("""echo "cpu_model = '{}'" >> ./vars.{}.js""".format(cpu_model,hostname))
+    read_process("""echo "hypervisor = '{}'" >> ./vars.{}.js""".format(hypervisor,hostname))
 
     # load os version
     os_version = read_file('{}/os-version.txt'.format(input_path))
-    read_process("""echo "os_version = '{}'" >> ./vars.js""".format(os_version))
+    read_process("""echo "os_version = '{}'" >> ./vars.{}.js""".format(os_version,hostname))
 
     # parsing & load memory info
     mem_info = read_file('{}/mem-info.txt'.format(input_path))
     mem_space = re.findall(r"^Mem.+",mem_info,re.M)[0].split()[1]
     swap_space = re.findall(r"^Swap.+",mem_info,re.M)[0].split()[1]
     mem_swap = mem_space + '/' + swap_space
-    read_process("""echo "mem_swap = '{}'" >> ./vars.js""".format(mem_swap))
+    read_process("""echo "mem_swap = '{}'" >> ./vars.{}.js""".format(mem_swap,hostname))
 
     # parsing & load memory info
     disk_info = read_file('{}/disk-info2.txt'.format(input_path))
     home_space_total = re.findall(r".+\/$",disk_info,re.M)[0].split()[1]
     home_space_used = re.findall(r".+\/$",disk_info,re.M)[0].split()[2]
-    read_process("""echo "home_space_total = '{}'" >> ./vars.js""".format(home_space_total))
-    read_process("""echo "home_space_used = '{}'" >> ./vars.js""".format(home_space_used))
+    read_process("""echo "home_space_total = '{}'" >> ./vars.{}.js""".format(home_space_total,hostname))
+    read_process("""echo "home_space_used = '{}'" >> ./vars.{}.js""".format(home_space_used,hostname))
 
     # load uptime
     uptime = read_file('{}/uptime.txt'.format(input_path))
-    read_process("""echo "uptime = '{}'" >> ./vars.js""".format(uptime))
+    read_process("""echo "uptime = '{}'" >> ./vars.{}.js""".format(uptime,hostname))
 
     # parsing & load ulimit info
     ulimit = read_file('{}/ulimit.txt'.format(input_path))
     ulimit_nproc = re.findall(r"^Max processes.+",ulimit,re.M)[0].split()[3]
     ulimit_nofile = re.findall(r"^Max open files.+",ulimit,re.M)[0].split()[4]
-    read_process("echo 'ulimit_nproc = {}' >> ./vars.js".format(ulimit_nproc))
-    read_process("echo 'ulimit_nofile = {}' >> ./vars.js".format(ulimit_nofile))
+    read_process("echo 'ulimit_nproc = {}' >> ./vars.{}.js".format(ulimit_nproc,hostname))
+    read_process("echo 'ulimit_nofile = {}' >> ./vars.{}.js".format(ulimit_nofile,hostname))
 
     # parsing & load readahead
     readahead = read_file('{}/readahead.txt'.format(input_path))
     readahead = re.findall(r"^rw.+",readahead,re.M)[0].split()[1]
-    read_process("echo 'readahead = {}' >> ./vars.js".format(readahead))
+    read_process("echo 'readahead = {}' >> ./vars.{}.js".format(readahead,hostname))
 
     # parsing & check if thp enabled
     thp_enabled = read_file('{}/thp_enabled.txt'.format(input_path))
@@ -100,7 +100,7 @@ for host in hosts:
         thp_enabled_flag = "true"
     else:
         thp_enabled_flag = "false"
-    read_process("echo 'thp_enabled_flag = {}' >> ./vars.js".format(thp_enabled_flag))
+    read_process("echo 'thp_enabled_flag = {}' >> ./vars.{}.js".format(thp_enabled_flag,hostname))
 
     path = '{}/thp_defrag.txt'.format(input_path)
     thp_defrag = read_file('{}/thp_defrag.txt'.format(input_path))
@@ -108,88 +108,88 @@ for host in hosts:
         thp_defrag_flag = "true"
     else:
         thp_defrag_flag = "false"
-    read_process("echo 'thp_defrag_flag = {}' >> ./vars.js".format(thp_defrag_flag))
+    read_process("echo 'thp_defrag_flag = {}' >> ./vars.{}.js".format(thp_defrag_flag,hostname))
 
     # parsing & check if selinux enabled
     selinux = read_file('{}/selinux.txt'.format(input_path))
     isSelinux = "false" if re.findall(r"^SELINUX.+",selinux,re.M)[0].split("=")[1] == "disabled" else "true"
-    read_process("echo 'isSelinux = {}' >> ./vars.js".format(isSelinux))
+    read_process("echo 'isSelinux = {}' >> ./vars.{}.js".format(isSelinux,hostname))
 
     # parsing & load vm zone reclaim mode
     vm_zone_reclaim_mode = read_file('{}/vm_zone_reclaim_mode.txt'.format(input_path))
-    read_process("echo 'vm_zone_reclaim_mode = {}' >> ./vars.js".format(vm_zone_reclaim_mode))
+    read_process("echo 'vm_zone_reclaim_mode = {}' >> ./vars.{}.js".format(vm_zone_reclaim_mode,hostname))
 
     # parsing & load vm swappiness
     vm_swappiness = read_file('{}/vm_swappiness.txt'.format(input_path))
-    read_process("echo 'vm_swappiness = {}' >> ./vars.js".format(vm_swappiness))
+    read_process("echo 'vm_swappiness = {}' >> ./vars.{}.js".format(vm_swappiness,hostname))
 
     # parsing & load mongodb version
     mongodb_version = read_file('{}/mongodb_version.txt'.format(input_path))
     mongodb_version = re.findall(r"v[\d.]+",mongodb_version)[0]
-    read_process("""echo "mongodb_version = '{}'" >> ./vars.js""".format(mongodb_version))
+    read_process("""echo "mongodb_version = '{}'" >> ./vars.{}.js""".format(mongodb_version,hostname))
 
     # parsing & load mongodb fcv
     mongodb_fcv = read_file('{}/{}/mongodb_fcv.txt'.format(input_path,mongod_name))
     mongodb_fcv = re.findall(r"version.+",mongodb_fcv)[0].split(":")[1].strip().strip("\"")
-    read_process("""echo "mongodb_fcv = '{}'" >> ./vars.js""".format(mongodb_fcv))
+    read_process("""echo "mongodb_fcv = '{}'" >> ./vars.{}.js""".format(mongodb_fcv,hostname))
 
     # parsing & load mongodb port
     mongodb_port = read_file('{}/mongodb_port.txt'.format(input_path))
-    read_process("echo 'mongodb_port = {}' >> ./vars.js".format(mongodb_port))
+    read_process("echo 'mongodb_port = {}' >> ./vars.{}.js".format(mongodb_port,hostname))
 
     # parsing & load server status info
     mongodb_serverStatus = read_file('{}/{}/mongodb_serverStatus.txt'.format(input_path,mongod_name))
 
     serverStatus_uptime = re.findall(r"\"uptime\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-    read_process("echo 'serverStatus_uptime = {}' >> ./vars.js".format(serverStatus_uptime))
+    read_process("echo 'serverStatus_uptime = {}' >> ./vars.{}.js".format(serverStatus_uptime,hostname))
 
     serverStatus_asserts_warning = re.findall(r"\"warning\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-    read_process("echo 'serverStatus_asserts_warning = {}' >> ./vars.js".format(serverStatus_asserts_warning))
+    read_process("echo 'serverStatus_asserts_warning = {}' >> ./vars.{}.js".format(serverStatus_asserts_warning,hostname))
 
     serverStatus_asserts_user = re.findall(r"\"user\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-    read_process("echo 'serverStatus_asserts_user = {}' >> ./vars.js".format(serverStatus_asserts_user))
+    read_process("echo 'serverStatus_asserts_user = {}' >> ./vars.{}.js".format(serverStatus_asserts_user,hostname))
 
     serverStatus_connections_current = re.findall(r"\"connections\"(.+\n){2}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-    read_process("echo 'serverStatus_connection_current = {}' >> ./vars.js".format(serverStatus_connections_current))
+    read_process("echo 'serverStatus_connection_current = {}' >> ./vars.{}.js".format(serverStatus_connections_current,hostname))
 
     serverStatus_connections_available = re.findall(r"\"connections\"(.+\n){3}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
-    read_process("echo 'serverStatus_connections_available = {}' >> ./vars.js".format(serverStatus_connections_available))
+    read_process("echo 'serverStatus_connections_available = {}' >> ./vars.{}.js".format(serverStatus_connections_available,hostname))
 
     serverStatus_extra_info_page_faults = re.findall(r"\"page_faults\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
     serverStatus_extra_info_page_faults = re.findall(r"\d+",serverStatus_extra_info_page_faults)[0]
-    read_process("echo 'serverStatus_extra_info_page_faults = {}' >> ./vars.js".format(serverStatus_extra_info_page_faults))
+    read_process("echo 'serverStatus_extra_info_page_faults = {}' >> ./vars.{}.js".format(serverStatus_extra_info_page_faults,hostname))
 
     serverStatus_opLatencies_reads_latency = re.findall(r"\"reads\".+(\n.+){1}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
     serverStatus_opLatencies_reads_latency = re.findall(r"\d+",serverStatus_opLatencies_reads_latency)[0]
-    read_process("echo 'serverStatus_opLatencies_reads_latency = {}' >> ./vars.js".format(serverStatus_opLatencies_reads_latency))
+    read_process("echo 'serverStatus_opLatencies_reads_latency = {}' >> ./vars.{}.js".format(serverStatus_opLatencies_reads_latency,hostname))
 
     serverStatus_opLatencies_reads_ops = re.findall(r"\"reads\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
     serverStatus_opLatencies_reads_ops = re.findall(r"\d+",serverStatus_opLatencies_reads_ops)[0]
-    read_process("echo 'serverStatus_opLatencies_reads_ops = {}' >> ./vars.js".format(serverStatus_opLatencies_reads_ops))
+    read_process("echo 'serverStatus_opLatencies_reads_ops = {}' >> ./vars.{}.js".format(serverStatus_opLatencies_reads_ops,hostname))
 
     serverStatus_opLatencies_writes_latency = re.findall(r"\"writes\".+(\n.+){1}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
     serverStatus_opLatencies_writes_latency = re.findall(r"\d+",serverStatus_opLatencies_writes_latency)[0]
-    read_process("echo 'serverStatus_opLatencies_writes_latency = {}' >> ./vars.js".format(serverStatus_opLatencies_writes_latency))
+    read_process("echo 'serverStatus_opLatencies_writes_latency = {}' >> ./vars.{}.js".format(serverStatus_opLatencies_writes_latency,hostname))
 
     serverStatus_opLatencies_writes_ops = re.findall(r"\"writes\".+(\n.+){2}",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
     serverStatus_opLatencies_writes_ops = re.findall(r"\d+",serverStatus_opLatencies_writes_ops)[0]
-    read_process("echo 'serverStatus_opLatencies_writes_ops = {}' >> ./vars.js".format(serverStatus_opLatencies_writes_ops))
+    read_process("echo 'serverStatus_opLatencies_writes_ops = {}' >> ./vars.{}.js".format(serverStatus_opLatencies_writes_ops,hostname))
 
     serverStatus_cursor_timedOut = re.findall(r"\"timedOut\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
     serverStatus_cursor_timedOut = re.findall(r"\d+",serverStatus_cursor_timedOut)[0]
-    read_process("echo 'serverStatus_cursor_timedOut = {}' >> ./vars.js".format(serverStatus_cursor_timedOut))
+    read_process("echo 'serverStatus_cursor_timedOut = {}' >> ./vars.{}.js".format(serverStatus_cursor_timedOut,hostname))
 
     serverStatus_operation_scanAndOrder = re.findall(r"\"scanAndOrder\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
     serverStatus_operation_scanAndOrder = re.findall(r"\d+",serverStatus_operation_scanAndOrder)[0]
-    read_process("echo 'serverStatus_operation_scanAndOrder = {}' >> ./vars.js".format(serverStatus_operation_scanAndOrder))
+    read_process("echo 'serverStatus_operation_scanAndOrder = {}' >> ./vars.{}.js".format(serverStatus_operation_scanAndOrder,hostname))
 
     serverStatus_operation_writeConflicts = re.findall(r"\"writeConflicts\".+",mongodb_serverStatus)[0].split(":")[1].strip().strip(',')
     serverStatus_operation_writeConflicts = re.findall(r"\d+",serverStatus_operation_writeConflicts)[0]
-    read_process("echo 'serverStatus_operation_writeConflicts = {}' >> ./vars.js".format(serverStatus_operation_writeConflicts))
+    read_process("echo 'serverStatus_operation_writeConflicts = {}' >> ./vars.{}.js".format(serverStatus_operation_writeConflicts,hostname))
 
     mongodb_rs_conf = read_file('{}/{}/mongodb_rs_conf.txt'.format(input_path,mongod_name))
     mongodb_rs_conf = re.sub(r"\"","\"",mongodb_rs_conf,0)
-    read_process("echo 'mongodb_rs_conf = {};' >> ./vars.js".format(mongodb_rs_conf))
+    read_process("echo 'mongodb_rs_conf = {};' >> ./vars.{}.js".format(mongodb_rs_conf,hostname))
 
     # dump linux config data into mongodb
     output_linux_config_dump = mongosh(port=mongodb_port,\
@@ -199,6 +199,7 @@ for host in hosts:
         tlsCAFile=tlsCAFile,\
         tlsCertificateKeyFile=tlsCertificateKeyFile,\
         tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
+        var=hostname,\
         js="linux_config_dump.js")
 
     # dump server status data into mongodb
@@ -209,6 +210,7 @@ for host in hosts:
         tlsCAFile=tlsCAFile,\
         tlsCertificateKeyFile=tlsCertificateKeyFile,\
         tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
+        var=hostname,\
         js="server_status_dump.js")
 
     # parsing & dump mongodb dbs status into mongodb
@@ -251,7 +253,7 @@ for host in hosts:
     mongodb_rs_frag = read_file('{}/{}/mongodb_rs_frag.txt'.format(input_path,mongod_name))
     mongodb_rs_frag = re.sub(r"loading.+","",mongodb_rs_frag,0)
     mongodb_rs_frag = re.sub(r"\"","\\\"",mongodb_rs_frag,0)
-    read_process("""echo "mongodb_rs_frag = {}" >> ./vars.js""".format(mongodb_rs_frag))
+    read_process("""echo "mongodb_rs_frag = {}" >> ./vars.{}.js""".format(mongodb_rs_frag,hostname))
 
     output_mongodb_rs_frag = mongosh(port=mongodb_port,\
         username=username,\
@@ -260,4 +262,5 @@ for host in hosts:
         tlsCAFile=tlsCAFile,\
         tlsCertificateKeyFile=tlsCertificateKeyFile,\
         tlsCertificateKeyFilePassword=tlsCertificateKeyFilePassword,\
+        var=hostname,\
         js="addFields.js")

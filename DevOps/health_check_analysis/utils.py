@@ -44,7 +44,7 @@ def mongosh(**args):
             --tlsCertificateKeyFile {} \
             --tlsCAFile {} \
             --tlsCertificateKeyFilePassword {}".format(args['tlsCertificateKeyFile'],args['tlsCAFile'],args['tlsCertificateKeyFilePassword'])
-    sh_args += " ./vars.js ./{}".format(args['js'])
+    sh_args += " ./vars.{}.js ./{}".format(args['var'],args['js'])
     read_process(sh_args)
 
 def mongoimport(**args):
