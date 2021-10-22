@@ -1,7 +1,7 @@
 {
     "hosts": [
         {
-            "name": "rs0_0",
+            "mongod_name": "rs0_0",
             "username": "admin",
             "password": "admin",
             "mongod_conf": "/etc/mongod.conf"
