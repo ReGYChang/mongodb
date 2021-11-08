@@ -25,7 +25,7 @@ with open("{}".format(config_path),"r") as config_data:
 mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
 
 # check if tls/ssl protocal enable
-if re.findall(r"tls:",mongod_conf) != None:
+if len(re.findall(r"tls:",mongod_conf)) > 0:
     isTls = True
     tlsCertificateKeyFile = re.findall(r"certificateKeyFile.+",mongod_conf)[0].split(":")[1].strip()
     tlsCAFile = re.findall(r"CAFile.+",mongod_conf)[0].split(":")[1].strip()
