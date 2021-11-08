@@ -28,7 +28,7 @@ public class Main {
 //            System.setProperty("javax.net.ssl.keyStore","mongo-java-driver/src/main/resources/tls/keystore");
 //            System.setProperty("javax.net.ssl.keyStorePassword","storepass");
 
-            ConnectionString connectionString = new ConnectionString("mongodb://admin:admin@34.80.242.15/?authSource=admin");
+            ConnectionString connectionString = new ConnectionString("mongodb://user:pwd@hostname/?authSource=admin");
 
 //            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
 //            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
