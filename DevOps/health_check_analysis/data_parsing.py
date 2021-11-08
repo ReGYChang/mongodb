@@ -54,7 +54,7 @@ for host in hosts:
     cpu_cores = re.findall(r"^CPU\(s\).+\d",cpu_info,re.M)[0].split(":")[1].strip()
     cpu_model = re.findall(r"^Model name:.+",cpu_info,re.M)[0].split(":")[1].strip()
 
-    ##### FIX hypervisor or physical
+    # check is hypervisor or physical
     hypervisor = re.findall(r"^Hypervisor.+",cpu_info,re.M)[0].split(":")[1].strip()
     read_process("echo 'cpu_cores = {}' >> ./vars.{}.js".format(cpu_cores,hostname))
     read_process("""echo "cpu_model = '{}'" >> ./vars.{}.js""".format(cpu_model,hostname))
