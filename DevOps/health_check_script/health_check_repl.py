@@ -140,6 +140,7 @@ output_ulimit = bashsh(cmd="cat",\
 config_data = open('config.json')
 config_json = json.load(config_data)
 mongo_hosts = config_json["hosts"]
+mongo_bin_path = config_json["mongo_bin_path"]
 
 for host in mongo_hosts:
     config_path = host["mongod_conf"]
@@ -156,9 +157,9 @@ for host in mongo_hosts:
         except Exception as e:
             print(e)
 
-    log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
+    #log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
     mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
-    mongod_version = re.findall(r"(v[\d.]+)",read_process("/usr/bin/mongod --version"))[0].split('.')[1].strip()
+    mongod_version = re.findall(r"(v[\d.]+)",read_process("{}mongod --version".format(mongo_bin_path)))[0].split('.')[1].strip()
 
     if len(re.findall(r"tls:",mongod_conf)) > 0:
         isTls = True
@@ -180,7 +181,7 @@ for host in mongo_hosts:
         task_name="mongodb_config",\
         append=False)
 
-    output_mongodb_version = bashsh(cmd="/usr/bin/mongod",\
+    output_mongodb_version = bashsh(cmd="{}mongod".format(mongo_bin_path),\
         args=["-version"],\
         output_path=output_path,\
         task_name="mongodb_version",\
@@ -192,7 +193,8 @@ for host in mongo_hosts:
         task_name="mongodb_port",\
         append=False)
     
-    output_mongodb_serverStatus = mongosh(port=mongodb_port,\
+    output_mongodb_serverStatus = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\
@@ -205,7 +207,8 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_serverStatus")
 
-    output_mongodb_rs_conf = mongosh(port=mongodb_port,\
+    output_mongodb_rs_conf = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\
@@ -218,7 +221,8 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_rs_conf")
 
-    output_mongodb_rs_status = mongosh(port=mongodb_port,\
+    output_mongodb_rs_status = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\
@@ -231,7 +235,8 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_rs_status")
 
-    output_mongodb_rs_oplog = mongosh(port=mongodb_port,\
+    output_mongodb_rs_oplog = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\
@@ -244,7 +249,8 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_rs_oplog")
 
-    output_mongodb_fcv = mongosh(port=mongodb_port,\
+    output_mongodb_fcv = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\
@@ -257,7 +263,8 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_fcv")
 
-    output_mongodb_dbstats = mongosh(port=mongodb_port,\
+    output_mongodb_dbstats = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\
@@ -270,7 +277,8 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_dbstats")
 
-    output_mongodb_rs_frag = mongosh(port=mongodb_port,\
+    output_mongodb_rs_frag = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\
@@ -283,7 +291,8 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_rs_frag")
 
-    output_mongodb_colls_stats = mongosh(port=mongodb_port,\
+    output_mongodb_colls_stats = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\
@@ -296,7 +305,8 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_collstats")
 
-    output_mongodb_indexes = mongosh(port=mongodb_port,\
+    output_mongodb_indexes = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\
@@ -309,7 +319,8 @@ for host in mongo_hosts:
         mongod_name=mongod_name,\
         task_name="mongodb_indexes")
 
-    output_mongodb_rs_lagtime = mongosh(port=mongodb_port,\
+    output_mongodb_rs_lagtime = mongosh(mongo="{}mongo".format(mongo_bin_path),\
+        port=mongodb_port,\
         username=username,\
         password=password,\
         isTls=isTls,\

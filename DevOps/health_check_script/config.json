@@ -1,4 +1,5 @@
 {
+    "mongo_bin_path": "/usr/bin/",
     "hosts": [
         {
             "mongod_name": "rs0_0",

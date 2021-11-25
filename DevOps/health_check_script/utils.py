@@ -33,12 +33,12 @@ def bashsh(**args):
     read_process(sh_args)
 
 def mongosh(**args):
-    sh_args = "mongo \
+    sh_args = "{} \
         --quiet \
         --port {} \
         -u {} \
         -p {} \
-        --authenticationDatabase=admin".format(args['port'],args['username'],args['password'])
+        --authenticationDatabase=admin".format(args['mongo'],args['port'],args['username'],args['password'])
     if args['isTls']:
         sh_args += " --tls \
             --tlsCertificateKeyFile {} \
