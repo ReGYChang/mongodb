@@ -3,6 +3,7 @@ var ts = (new Date()).getTime();
 
 var document = {
   "host" : hostname,
+  "quarter" : quarter,
   "cpuModel" : cpu_model,
   "hypervisor" : hypervisor,
   "osVersion" : os_version,

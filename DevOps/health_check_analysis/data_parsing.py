@@ -3,8 +3,9 @@ import re
 from utils import *
 
 # import mongodb configuration
-config_data = open('config.json')
-config_json = json.load(config_data)
+with open('config.json') as config_data:
+    config_json = json.load(config_data)
+
 username = config_json["username"]
 password = config_json["password"]
 config_path = config_json["mongod_conf"]
@@ -13,6 +14,7 @@ health_check_end = config_json["health_check_end"]
 company = config_json["company"]
 hosts = config_json["hosts"]
 health_check_date = config_json["date"]
+quarter = config_json["quarter"]
 
 
 # read mongod.conf
@@ -43,7 +45,8 @@ for host in hosts:
     input_path = "./{}_health_check_{}".format(hostname,health_check_date)
 
     # parsing & load health check data
-    read_process("""echo "company = '{}'" > ./vars.{}.js""".format(company,hostname))
+    read_process("""echo "quarter = '{}'" > ./vars.{}.js""".format(quarter,hostname))
+    read_process("""echo "company = '{}'" >> ./vars.{}.js""".format(company,hostname))
     read_process("""echo "mongodb_set = '{}'" >> ./vars.{}.js""".format(mongodb_set,hostname))
     read_process("""echo "hostname = '{}'" >> ./vars.{}.js""".format(hostname,hostname))
     read_process("""echo "health_check_start = {}" >> ./vars.{}.js""".format(health_check_start,hostname))
@@ -234,9 +237,9 @@ for host in hosts:
     mongodb_collstats = read_file('{}/{}/mongodb_collstats.txt'.format(input_path,mongod_name))
     mongodb_collstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_collstats)
     mongodb_collstats = re.sub(r"loading.+","",mongodb_collstats,0)
-    f = open("{}/{}/mongodb_collstats.json".format(input_path,mongod_name),"w+")
-    f.write(mongodb_collstats)
-    f.close()
+
+    with open("{}/{}/mongodb_collstats.json","w") as f:
+        f.write(mongodb_collstats)
 
     mongoimport(port=mongodb_port, \
         username=username, \

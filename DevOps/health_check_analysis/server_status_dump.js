@@ -2,6 +2,8 @@ var db = db.getSiblingDB(company);
 var ts = (new Date()).getTime();
 
 var document = {
+    "host" : hostname,
+    "quarter" : quarter,
     "rsSet" : mongodb_set,
     "rsConf" : mongodb_rs_conf,
     "fcv" : mongodb_fcv,

@@ -4,6 +4,7 @@
     "mongod_conf": "/etc/mongod.conf",
     "health_check_start": 1600000000,
     "health_check_end": 1700000000,
+    "quarter": "Q4",
     "company": "fubon",
     "date": "2021-10-14",
     "hosts": [
