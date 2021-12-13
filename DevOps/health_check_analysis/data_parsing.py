@@ -238,7 +238,7 @@ for host in hosts:
     mongodb_collstats = re.sub(r"\"\$clusterTime\"(.+\n){7}","",mongodb_collstats)
     mongodb_collstats = re.sub(r"loading.+","",mongodb_collstats,0)
 
-    with open("{}/{}/mongodb_collstats.json","w") as f:
+    with open("{}/{}/mongodb_collstats.json".format(input_path,mongod_name),"w") as f:
         f.write(mongodb_collstats)
 
     mongoimport(port=mongodb_port, \
