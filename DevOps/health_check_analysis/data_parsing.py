@@ -36,7 +36,7 @@ else:
     isTls = False
     tlsCertificateKeyFile = ""
     tlsCAFile = ""
-    tlsCertifacateKeyFilePassword = ""
+    tlsCertificateKeyFilePassword = ""
 
 for host in hosts:
     hostname = host["hostname"]
