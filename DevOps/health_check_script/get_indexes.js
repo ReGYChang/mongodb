@@ -1,6 +1,6 @@
 // get all collections stats //
 
-if(version < 2){
+if(version <= 2){
     db.getMongo().setSlaveOk();
 }else{
     rs.secondaryOk();
