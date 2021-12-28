@@ -24,5 +24,6 @@ for host in mongo_hosts:
     mongodb_dbpath = re.findall(r"(dbPath.+)",mongod_conf)[0].split(':')[1].strip()
     log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
 
+
 print(read_process("./keyhole_amd -allinfo mongodb://{}:{}@localhost:{}".format(username,password,mongodb_port)))
 print(read_process("./keyhole_amd -loginfo {}".format(log_path)))
