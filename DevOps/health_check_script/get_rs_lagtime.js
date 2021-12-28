@@ -1,8 +1,8 @@
 // get replica set member lag time //
 
-if(version.split('.')[2] < 8){
-    db.getMongo().setSlaveOk();
+if(version < 8){
+    db.printSlaveReplicationInfo();
 }else{
-    rs.secondaryOk();
+    db.printSecondaryReplicationInfo();
 }
 

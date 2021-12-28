@@ -1,4 +1,4 @@
-if(version.split('.')[2] < 8){
+if(version < 8){
     db.getMongo().setSlaveOk();
 }else{
     rs.secondaryOk();
