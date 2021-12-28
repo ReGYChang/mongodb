@@ -159,6 +159,7 @@ for host in mongo_hosts:
 
     #log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
     mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
+    mongodb_dbpath = re.findall(r"(dbPath.+)",mongod_conf)[0].split(':')[1].strip()
     mongod_version = read_process("mongo --quiet -port {} -u {} -p {} --eval 'db.serverBuildInfo().version'".format(mongodb_port,username,password))
     read_process("echo version={} > ./vars.js".format(mongod_version.split('.')[2]))
 
@@ -331,6 +332,9 @@ for host in mongo_hosts:
         output_path=output_path,\
         mongod_name=mongod_name,\
         task_name="mongodb_rs_lagtime")
+
+# copy diagnostic.data to output dir
+output_diagnostic = read_process("cp -r {}/diagnostic.data {}".format(mongodb_dbpath,output_dir))
 
 # compress output health check files
 output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
