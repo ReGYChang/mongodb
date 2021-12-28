@@ -159,7 +159,8 @@ for host in mongo_hosts:
 
     #log_path = re.findall(r"(path.+)",mongod_conf)[0].split(':')[1].strip()
     mongodb_port = re.findall(r"(port.+)",mongod_conf)[0].split(':')[1].strip()
-    mongod_version = read_process("mongo --quiet -port {} -u {} -p {} --eval 'db.serverBuildInfo().version' > ./vars.js".format(mongodb_port,username,password))
+    mongod_version = read_process("mongo --quiet -port {} -u {} -p {} --eval 'db.serverBuildInfo().version'".format(mongodb_port,username,password))
+    read_process("echo version={} > ./vars.js".format(mongod_version))
 
     if len(re.findall(r"tls:",mongod_conf)) > 0:
         isTls = True
