@@ -1,6 +1,6 @@
 // get all dbs stats //
 
-if(version <= 2){
+if(version.split('.')[2] < 8){
     db.getMongo().setSlaveOk();
 }else{
     rs.secondaryOk();
