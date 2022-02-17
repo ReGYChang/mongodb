@@ -9,7 +9,7 @@ from utils import *
 health_check_date = date.today()
 hostname = read_process("hostname").strip()
 output_dir = "{}_health_check_{}".format(hostname,health_check_date)
-output_path = "./{}".format(output_dir)
+output_path = "./out/{}".format(output_dir)
 mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 
 # create health check dir
