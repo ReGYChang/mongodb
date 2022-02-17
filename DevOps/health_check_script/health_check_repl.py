@@ -13,7 +13,7 @@ output_path = "./out/{}".format(output_dir)
 mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 
 # create health check dir
-read_process("mkdir ./out/{}".format(output_dir))
+read_process("mkdir -p ./out/{}".format(output_dir))
 
 # collect linux info
 output_osVersion = bashsh(cmd="cat",\
@@ -148,7 +148,7 @@ for host in mongo_hosts:
     username = host["username"]
     password = host["password"]
 
-    read_process("mkdir -p {}/{}".format(output_dir,mongod_name))
+    read_process("mkdir -p ./out/{}/{}".format(output_dir,mongod_name))
 
     # read mongod.conf
     with open("{}".format(config_path),"r") as config_data:
@@ -334,10 +334,10 @@ for host in mongo_hosts:
         task_name="mongodb_rs_lagtime")
 
 # copy diagnostic.data to output dir
-output_diagnostic = read_process("cp -r {}/diagnostic.data {}".format(mongodb_dbpath,output_dir))
+#output_diagnostic = read_process("cp -r {}/diagnostic.data ./out/{}".format(mongodb_dbpath,output_dir))
 
 # compress output health check files
-output_compression = read_process("tar zcvf {}.tar.gz {}".format(output_dir, output_dir))
+output_compression = read_process("tar zcvf ./out/{}.tar.gz {}".format(output_dir, output_dir))
 
 # health check end
 sys.stdout.write('\n')

@@ -3,8 +3,8 @@
     "hosts": [
         {
             "mongod_name": "rs0_0",
-            "username": "admin",
-            "password": "admin",
+            "username": "root",
+            "password": "root",
             "mongod_conf": "/etc/mongod.conf"
         }
     ]
