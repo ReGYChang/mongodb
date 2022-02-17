@@ -13,7 +13,7 @@ output_path = "./out/{}".format(output_dir)
 mongod_pid = check_output(["pidof","-s","mongod"]).strip()
 
 # create health check dir
-read_process("mkdir {}".format(output_dir))
+read_process("mkdir ./out/{}".format(output_dir))
 
 # collect linux info
 output_osVersion = bashsh(cmd="cat",\
